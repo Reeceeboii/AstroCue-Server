@@ -1,7 +1,9 @@
 namespace AstroCue.Server
 {
+    using Data;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
@@ -32,6 +34,11 @@ namespace AstroCue.Server
         /// <param name="services">Instance of <see cref="IServiceCollection"/></param>
         public void ConfigureServices(IServiceCollection services)
         {
+            // Register database context with SQL Server
+            services.AddDbContext<ApplicationDbContext>(options =>
+            {
+                options.UseSqlServer(this.Configuration.GetConnectionString("SQLServer"));
+            });
 
             services.AddControllers();
 
