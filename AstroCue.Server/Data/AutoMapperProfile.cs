@@ -4,6 +4,7 @@
     using Entities;
     using Models.API.Inbound;
     using Models.API.Outbound;
+    using Models.Email;
 
     /// <summary>
     /// Class to hold AutoMapper type mappings
@@ -20,11 +21,11 @@
             this.CreateMap<AstroCueUser, OutboundAuthSuccessModel>();
 
             // observation locations
-            //CreateMap<InboundObservationLocationModel, ObservationLocation>();
-            //CreateMap<ObservationLocation, OutboundObsLocationModel>();
+            //this.CreateMap<InboundObservationLocationModel, ObservationLocation>();
+            //this.CreateMap<ObservationLocation, OutboundObsLocationModel>();
 
             // email models
-            //CreateMap<AstroCueUser, WelcomeEmailModel>();
+            this.CreateMap<AstroCueUser, WelcomeEmailModel>();
         }
     }
 }
