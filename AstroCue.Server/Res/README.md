@@ -17,7 +17,7 @@ This file contains descriptions, filenames, sources and export options for all o
 
 ---
 <a name="hipparcos"></a>
-## [The Hipparcos and Tycho Catalogues]((https://vizier.cds.unistra.fr/viz-bin/VizieR-3?-source=I/239/hip_main&-out.max=50&-out.form=HTML%20Table&-out.add=_r&-out.add=_RAJ,_DEJ&-sort=_r&-oc.form=sexa)) (ESA 1997)
+## [The Hipparcos and Tycho Catalogues](https://vizier.cds.unistra.fr/viz-bin/VizieR-3?-source=I/239/hip_main&-out.max=50&-out.form=HTML%20Table&-out.add=_r&-out.add=_RAJ,_DEJ&-sort=_r&-oc.form=sexa) (ESA 1997)
 - **`I239_hip_main.tsv` (118218 rows)**
 
 Sourced from Université de Strasbourg/CNRS [VizieR service](https://vizier.cds.unistra.fr/viz-bin/VizieR).
@@ -87,7 +87,7 @@ _RAJ2000|_DEJ2000|HIP|Vmag
 
 ---
 <a name="ngc"></a>
-## [Revised New General Catalogue]((https://vizier.cds.unistra.fr/viz-bin/VizieR-3?-source=VII/1B/catalog&-out.max=50&-out.form=HTML%20Table&-out.add=_r&-out.add=_RAJ,_DEJ&-sort=_r&-oc.form=sexa)) (Sulentic+, 1973) 
+## [Revised New General Catalogue](https://vizier.cds.unistra.fr/viz-bin/VizieR-3?-source=VII/1B/catalog&-out.max=50&-out.form=HTML%20Table&-out.add=_r&-out.add=_RAJ,_DEJ&-sort=_r&-oc.form=sexa) (Sulentic+, 1973) 
 - **`VII_1B_catalog.tsv` (8163 rows)**
 
 Sourced from Université de Strasbourg/CNRS [VizieR service](https://vizier.cds.unistra.fr/viz-bin/VizieR).
