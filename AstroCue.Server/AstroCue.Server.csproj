@@ -37,4 +37,19 @@
     <Folder Include="Res\Email Templates\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Res\I239_hip_main.tsv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Res\I239_hip_main_names.tsv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Res\VII_1B_catalog.tsv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Res\VII_1B_catalog_names.tsv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
