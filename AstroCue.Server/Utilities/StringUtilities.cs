@@ -1,9 +1,11 @@
 ﻿namespace AstroCue.Server.Utilities
 {
+    using System;
+
     /// <summary>
-    /// Class for various string helper functions
+    /// Class for testing <see cref="StringUtilities"/> methods
     /// </summary>
-    public class StringUtilities
+    public static class StringUtilities
     {
         /// <summary>
         /// Given a string, trim excess whitespace and make the first character uppercase
@@ -13,8 +15,15 @@
         /// <returns>The string with char[0] uppercased and excess whitespace removed</returns>
         public static string TrimToUpperFirstChar(string s)
         {
-            s = s.Trim();
-            return char.ToUpper(s[0]) + s[1..];
+            try
+            {
+                s = s.Trim();
+                return char.ToUpper(s[0]) + s[1..];
+            }
+            catch (IndexOutOfRangeException)
+            {
+                return string.Empty;
+            }
         }
 
         /// <summary>

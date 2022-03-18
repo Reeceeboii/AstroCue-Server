@@ -24,5 +24,10 @@
         /// Gets the MailGun API key from the environment
         /// </summary>
         string MailGunApiKey { get; }
+
+        /// <summary>
+        /// Gets the base messages URL for the MailGun API
+        /// </summary>
+        string BaseMailGunMessagesUrl { get; }
     }
 }

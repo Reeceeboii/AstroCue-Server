@@ -38,10 +38,14 @@
         /// </summary>
         public string OpenWeatherMapApiKey => this._configuration["OpenWeatherMap:APIKey"];
 
-
         /// <summary>
         /// Gets the MailGun API key from the environment
         /// </summary>
         public string MailGunApiKey => this._configuration["MailGun:APIKey"];
+
+        /// <summary>
+        /// Gets the base messages URL for the MailGun API
+        /// </summary>
+        public string BaseMailGunMessagesUrl => "https://api.eu.mailgun.net/v3";
     }
 }

@@ -124,7 +124,7 @@ namespace AstroCue.Server
 
             services.AddSingleton<IFileSystem>(new FileSystem());
 
-            MapperConfiguration mapperConfiguration = new MapperConfiguration(mc =>
+            MapperConfiguration mapperConfiguration = new(mc =>
             {
                 // ISO8601
                 mc.CreateMap<DateTime, string>().ConvertUsing(datetime => datetime.ToString("s"));
@@ -133,6 +133,7 @@ namespace AstroCue.Server
 
             services.AddSingleton(mapperConfiguration.CreateMapper());
 
+            services.AddScoped<IHttpClientService, HttpClientService>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IAstroCueUserService, AstroCueUserService>();

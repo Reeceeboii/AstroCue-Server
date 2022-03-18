@@ -99,7 +99,7 @@
         /// Authenticates a user against the database
         /// </summary>
         /// <param name="inboundAuthModel">An instance of <see cref="InboundAuthModel"/></param>
-        /// <returns>Either an <see cref="OutboundSuccessfulAuthModel"/>
+        /// <returns>Either an <see cref="OutboundAuthSuccessModel"/>
         /// or an <see cref="OutboundErrorModel"/></returns>
         [HttpPost]
         [AllowAnonymous]
