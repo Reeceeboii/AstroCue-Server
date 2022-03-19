@@ -17,7 +17,7 @@
         {
             try
             {
-                s = s.Trim();
+                s = s.Trim().ToLower();
                 return char.ToUpper(s[0]) + s[1..];
             }
             catch (IndexOutOfRangeException)
