@@ -63,7 +63,7 @@
         /// Tests that the <see cref="AstroCueUserService"/> class can be initialised
         /// </summary>
         [TestMethod]
-        public void CanInitialisedAstroCueUserServiceTest()
+        public void CanInitialiseAstroCueUserServiceTest()
         {
             // Arrange
             // Act
