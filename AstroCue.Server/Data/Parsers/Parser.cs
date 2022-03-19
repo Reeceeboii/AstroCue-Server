@@ -11,16 +11,6 @@
     public abstract class Parser
     {
         /// <summary>
-        /// Relative path to the parser's data catalogue
-        /// </summary>
-        private readonly string _dataCatalogueRelativePath;
-
-        /// <summary>
-        /// Relative path to the parser's name catalogue
-        /// </summary>
-        private readonly string _nameCatalogueRelativePath;
-
-        /// <summary>
         /// Gets or sets the content read from the data catalogue
         /// </summary>
         protected string[] DataCatalogueContent { get; }
@@ -44,29 +34,29 @@
         protected Parser(IFileSystem fileSystem, string dataCatalogueFileName, string nameCatalogueFileName)
         {
             this.FileSystem = fileSystem;
-            this._dataCatalogueRelativePath = this.FileSystem.Path.Join("./Res", dataCatalogueFileName);
-            this._nameCatalogueRelativePath = this.FileSystem.Path.Join("./Res", nameCatalogueFileName);
+            string dataCatalogueRelativePath = this.FileSystem.Path.Join("./Res", dataCatalogueFileName);
+            string nameCatalogueRelativePath = this.FileSystem.Path.Join("./Res", nameCatalogueFileName);
 
             // check that catalogue files are present
-            if (!this.FileSystem.File.Exists(this._dataCatalogueRelativePath))
+            if (!this.FileSystem.File.Exists(dataCatalogueRelativePath))
             {
-                throw new FileNotFoundException(this._dataCatalogueRelativePath);
+                throw new FileNotFoundException(dataCatalogueRelativePath);
             }
 
-            if (!this.FileSystem.File.Exists(this._nameCatalogueRelativePath))
+            if (!this.FileSystem.File.Exists(nameCatalogueRelativePath))
             {
-                throw new FileNotFoundException(this._nameCatalogueRelativePath);
+                throw new FileNotFoundException(nameCatalogueRelativePath);
             }
 
             // at this point, the paths are set up and the files are confirmed to exist. Load them!
-            this.DataCatalogueContent = this.FileSystem.File.ReadAllLines(this._dataCatalogueRelativePath);
-            this.NameCatalogueContent = this.FileSystem.File.ReadAllLines(this._nameCatalogueRelativePath);
+            this.DataCatalogueContent = this.FileSystem.File.ReadAllLines(dataCatalogueRelativePath);
+            this.NameCatalogueContent = this.FileSystem.File.ReadAllLines(nameCatalogueRelativePath);
         }
 
         /// <summary>
-        /// Parses the catalogue and returns a list of <see cref="AstronomicalObject"/> instances
+        /// Parses a given catalogue
         /// </summary>
-        /// <returns></returns>
-        public abstract List<AstronomicalObject> ParseCatalogue();
+        /// <returns><see cref="IEnumerable{T}"/> of <see cref="AstronomicalObject"/> instances</returns>
+        public abstract IEnumerable<AstronomicalObject> ParseCatalogue();
     }
 }

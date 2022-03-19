@@ -18,7 +18,7 @@
         /// <summary>
         /// Parses the Hipparcos catalogue
         /// </summary>
-        /// <returns>A list of <see cref="HipparcosObject"/> instances</returns>
+        /// <returns>A list of <see cref="HipObject"/> instances</returns>
         public override List<AstronomicalObject> ParseCatalogue()
         {
             Dictionary<int, string> nameDictionary = new();
