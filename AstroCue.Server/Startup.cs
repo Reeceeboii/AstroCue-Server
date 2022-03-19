@@ -173,6 +173,8 @@ namespace AstroCue.Server
             {
                 endpoints.MapControllers();
             });
+
+            DataSeeder.SeedAstronomicalCatalogues(app);
         }
     }
 }
