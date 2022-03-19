@@ -12,16 +12,16 @@
     using Server.Entities.Owned;
 
     /// <summary>
-    /// Tests targeting the <see cref="HipParser"/> class
+    /// Test class targeting <see cref="NgcParser"/>
     /// </summary>
     [TestClass]
     [ExcludeFromCodeCoverage]
-    public class HipParserTests
+    public class NgcParserTests
     {
         /// <summary>
         /// System under test
         /// </summary>
-        private HipParser _sut;
+        private NgcParser _sut;
 
         /// <summary>
         /// Mock <see cref="IFileSystem"/> instance used by the tests
@@ -31,67 +31,67 @@
         /// <summary>
         /// <see cref="RightAscension"/> and <see cref="Declination"/> values to be used by the tests
         /// </summary>
-        private const int ExpectedCatalogueIndentifier = 59501;
-        private const int ExpectedRightAscensionHours = 12;
-        private const int ExpectedRightAscensionMinutes = 12;
-        private const double ExpectedRightAscensionSeconds = 09.2903464;
+        private const int ExpectedCatalogueIndentifier = 3697;
+        private const int ExpectedRightAscensionHours = 11;
+        private const int ExpectedRightAscensionMinutes = 28;
+        private const double ExpectedRightAscensionSeconds = 42.7;
         private const int ExpectedDeclinationDegrees = 20;
-        private const int ExpectedDeclinationMinutes = 32;
-        private const double ExpectedDeclinationSeconds = 31.429778;
-        private const float ExpectedApparentMagnitude = 5.60f;
+        private const int ExpectedDeclinationMinutes = 47;
+        private const double ExpectedDeclinationSeconds = 44;
+        private const float ExpectedApparentMagnitude = 14.0f;
 
         /// <summary>
-        /// A correctly formatted few lines from the Hipparcos catalogue for use in tests
+        /// A correctly formatted few lines from the NGC for use in tests
         /// </summary>
         private readonly string[] _correctlyFormattedCatalogue =
         {
-            "12 12 09.2903464|+20 32 31.429778| 59501| 5.60",
-            "12 12 10.2760619|-63 27 14.813107| 59502| 6.98",
-            "12 12 10.8985473|-58 49 05.988300| 59503| 8.53"
+            "11 28 42.7|+20 47 44|3697|A| 5|14.0",
+            "11 28 54.7|+20 42 44|3697|B| 5|15.5",
+            "11 28 54.7|+20 43 44|3698| | 5|15.5"
         };
 
         /// <summary>
-        /// Sample section of the Hippcaros name catalogue from the IAU WGSN
+        /// Sample section of the NGC name catalogue
         /// </summary>
         private readonly string[] _nameCatalogue =
         {
-            "test1             Dubhe             HR 4301      alf   α     UMa A    11037+6145  1.81  59502  95689 165.931965  61.751035 2016-06-30",
-            "test2             Dubhe             HR 4301      alf   α     UMa A    11037+6145  1.81  59503  95689 165.931965  61.751035 2016-06-30",
+            "Test1                              | 3697",
+            "Test2                              | 3698"
         };
 
         /// <summary>
-        /// A few lines from the Hipparcos catalogue with a right ascension and declination missing across 2 different entries
+        /// A few lines from the NGC with a right ascension and declination missing across 2 different entries
         /// </summary>
         private readonly string[] _catalogueMissingRaAndDec =
         {
-            "12 12 09.2903464|+20 32 31.429778| 59501| 5.60",
-            "                |-63 27 14.813107| 59502| 6.98",
-            "12 12 10.8985473|                | 59503| 8.53"
+            "11 28 42.7|+20 47 44|3697|A| 5|14.0",
+            "          |+20 42 44|3697|B| 5|15.5",
+            "11 28 54.7|         |3698| | 5|15.5"
         };
 
         /// <summary>
-        /// A few lines from the Hipparcos catalogue with one of the entries missing an apparent magnitude value 
+        /// A few lines from the NGC with one of the entries missing an apparent magnitude value 
         /// </summary>
         private readonly string[] _catalogueMissingApparentMagnitude =
         {
-            "12 12 09.2903464|+20 32 31.429778| 59501| 5.60",
-            "12 12 10.2760619|-63 27 14.813107| 59502|     ",
-            "12 12 10.8985473|-58 49 05.988300| 59503| 8.53"
+            "11 28 42.7|+20 47 44|3697|A| 5|14.0",
+            "11 28 54.7|+20 42 44|3697|B| 5|    ",
+            "11 28 54.7|+20 43 44|3698| | 5|15.5"
         };
 
         /// <summary>
-        /// Initialises a new instance of the <see cref="HipParserTests"/> class
+        /// Initialises a new instance of the <see cref="NgcParserTests"/> class
         /// </summary>
-        public HipParserTests()
+        public NgcParserTests()
         {
             this._mockFileSystem = new Mock<IFileSystem>();
         }
 
         /// <summary>
-        /// Tests that an instance of <see cref="HipParser"/> can be initialised
+        /// Tests that an instance of <see cref="NgcParser"/> can be initialised
         /// </summary>
         [TestMethod]
-        public void CanInitialiseHipParserTest()
+        public void CanInitialiseNgcParserTest()
         {
             // Arrange
             this.PrepMocksToReadCatalogues(this._correctlyFormattedCatalogue, this._nameCatalogue);
@@ -128,9 +128,12 @@
 
             result.Count.Should().Be(this._correctlyFormattedCatalogue.Length);
 
-            result[0].Name.Should().Be(null);
-            result[1].Name.Should().Be("test1");
-            result[2].Name.Should().Be("test2");
+            result[0].Name.Should().Be("Test1");
+            result[1].Name.Should().Be("Test1");
+            result[2].Name.Should().Be("Test2");
+
+            ((NgcObject)result[0]).Type.Should().Be("Galaxy");
+            ((NgcObject)result[0]).PartOfMultipleSystem.Should().Be(true);
 
             result[0].RightAscension.Should().NotBeNull();
             result[0].Declination.Should().NotBeNull();
@@ -223,11 +226,11 @@
         private void PrepMocksToReadCatalogues(string[] dataCatalogue, string[] nameCatalogue)
         {
             this._mockFileSystem
-                .Setup(i => i.Path.Join(It.IsAny<string>(), It.Is<string>(s => s == "I239_hip_main.tsv")))
+                .Setup(i => i.Path.Join(It.IsAny<string>(), It.Is<string>(s => s == "VII_1B_catalog.tsv")))
                 .Returns("datacataloguepath");
 
             this._mockFileSystem
-                .Setup(i => i.Path.Join(It.IsAny<string>(), It.Is<string>(s => s == "I239_hip_main_names.tsv")))
+                .Setup(i => i.Path.Join(It.IsAny<string>(), It.Is<string>(s => s == "VII_1B_catalog_names.tsv")))
                 .Returns("namecataloguepath");
 
             this._mockFileSystem
@@ -244,11 +247,11 @@
         }
 
         /// <summary>
-        /// Initialises a new intance of the <see cref="HipParser"/> class for testing
+        /// Initialises a new intance of the <see cref="NgcParser"/> class for testing
         /// </summary>
         private void CreateSut()
         {
-            this._sut = new HipParser(this._mockFileSystem.Object);
+            this._sut = new NgcParser(this._mockFileSystem.Object);
         }
     }
 }
