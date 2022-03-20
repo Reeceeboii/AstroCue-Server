@@ -4,6 +4,7 @@
     using System.IO;
     using System.IO.Abstractions;
     using Astronomy;
+    using Interfaces;
     using MaxRev.Gdal.Core;
     using Models.Misc;
     using OSGeo.GDAL;

@@ -1,4 +1,4 @@
-﻿namespace AstroCue.Server.Services
+﻿namespace AstroCue.Server.Services.Interfaces
 {
     using System;
     using Models.Misc;

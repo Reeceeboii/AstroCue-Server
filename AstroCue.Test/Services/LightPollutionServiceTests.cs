@@ -10,6 +10,7 @@
     using Server.Astronomy;
     using Server.Models.Misc;
     using Server.Services;
+    using Server.Services.Interfaces;
 
     /// <summary>
     /// Tests targeting <see cref="LightPollutionService"/>
