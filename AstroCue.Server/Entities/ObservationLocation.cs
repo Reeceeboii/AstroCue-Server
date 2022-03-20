@@ -36,15 +36,15 @@
         public float Latitude { get; set; }
 
         /// <summary>
-        /// Gets or sets the Bortle Scale value for this location
+        /// Gets or sets the BortleScale Scale value for this location
         /// https://en.wikipedia.org/wiki/Bortle_scale
         /// </summary>
         [Required]
-        [Range(1, 8, ErrorMessage = "Bortle out of range")]
+        [Range(1, 8, ErrorMessage = "Bortle Scale value out of range")]
         public int BortleScaleValue { get; set; }
 
         /// <summary>
-        /// Gets or sets a textual description of the location's Bortle Scale value
+        /// Gets or sets a textual description of the location's BortleScale Scale value
         /// </summary>
         [Required]
         public string BortleDesc { get; set; }

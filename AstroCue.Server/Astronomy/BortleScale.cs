@@ -6,15 +6,15 @@
     /// Class to handle Bortle Scale operations
     /// https://en.wikipedia.org/wiki/Bortle_scale
     /// </summary>
-    public static class Bortle
+    public static class BortleScale
     {
         /// <summary>
-        /// Converts a milicandela/m^2 value to a Bortle scale value. Uses the International Year of Astronomy's
+        /// Converts a milicandela/m^2 value to a Bortle Scale value. Uses the International Year of Astronomy's
         /// Sky Brightness Nomogram (http://www.darkskiesawareness.org/img/sky-brightness-nomogram.gif) for an approximate
         /// conversion
         /// </summary>
         /// <param name="mcdM2">A milicandella/m^2 value</param>
-        /// <returns>The value's approximate Bortle scale value</returns>
+        /// <returns>The value's approximate Bortle Scale value</returns>
         public static int McdM2ToBortle(float mcdM2)
         {
             return mcdM2 switch
@@ -39,11 +39,6 @@
         /// <exception cref="ArgumentException"></exception>
         public static string ScaleToDescription(int bortle)
         {
-            if (bortle is < 1 or > 8)
-            {
-                throw new ArgumentException("Out of expected range", nameof(bortle));
-            }
-
             return bortle switch
             {
                 1 => "Excellent Dark-sky Site",
@@ -53,7 +48,8 @@
                 5 => "Suburban Sky",
                 6 => "Bright Suburban Sky",
                 7 => "Suburban/Urban Transition",
-                8 => "City or inner city sky"
+                8 => "City or inner city sky",
+                _ => throw new ArgumentOutOfRangeException(nameof(bortle), "Argument out of range")
             };
         }
     }

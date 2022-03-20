@@ -115,11 +115,11 @@
             test2.Should().NotBeNull();
 
             test1.BortleValue.Should().Be(testExpectedBortle1);
-            test1.BortleDesc.Should().Be(Bortle.ScaleToDescription(testExpectedBortle1));
+            test1.BortleDesc.Should().Be(BortleScale.ScaleToDescription(testExpectedBortle1));
             Math.Round(test1.RawMilicandella, 3).Should().Be(Math.Round(expectedMillicandella1, 3));
 
             test2.BortleValue.Should().Be(testExpectedBortle2);
-            test2.BortleDesc.Should().Be(Bortle.ScaleToDescription(testExpectedBortle2));
+            test2.BortleDesc.Should().Be(BortleScale.ScaleToDescription(testExpectedBortle2));
             Math.Round(test2.RawMilicandella, 3).Should().Be(Math.Round(expectedMillicandella2, 3));
         }
 
