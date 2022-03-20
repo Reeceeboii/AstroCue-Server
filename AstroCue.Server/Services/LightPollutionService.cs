@@ -81,16 +81,16 @@
             }
 
             // read band 1 data at x and y offsets [mcd/m^2]
-            float[] millicandellaPerM2 = new float[1];
-            band.ReadRaster(xOffset, yOffset, 1, 1, millicandellaPerM2, 1, 1, 0, 0);
+            float[] milicandellaPerM2 = new float[1];
+            band.ReadRaster(xOffset, yOffset, 1, 1, milicandellaPerM2, 1, 1, 0, 0);
 
-            int bortle = Bortle.McdM2ToBortle(millicandellaPerM2[0]);
+            int bortle = Bortle.McdM2ToBortle(milicandellaPerM2[0]);
 
             return new LightPollution()
             {
                 BortleValue = bortle,
                 BortleDesc = Bortle.ScaleToDescription(bortle),
-                RawMilicandella = millicandellaPerM2[0]
+                RawMilicandella = milicandellaPerM2[0]
             };
         }
 

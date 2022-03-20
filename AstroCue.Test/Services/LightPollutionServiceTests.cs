@@ -1,5 +1,6 @@
 ﻿namespace AstroCue.Test.Services
 {
+    using System;
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.IO.Abstractions;
@@ -115,11 +116,51 @@
 
             test1.BortleValue.Should().Be(testExpectedBortle1);
             test1.BortleDesc.Should().Be(Bortle.ScaleToDescription(testExpectedBortle1));
-            test1.RawMilicandella.Should().Be(expectedMillicandella1);
+            Math.Round(test1.RawMilicandella, 3).Should().Be(Math.Round(expectedMillicandella1, 3));
 
             test2.BortleValue.Should().Be(testExpectedBortle2);
             test2.BortleDesc.Should().Be(Bortle.ScaleToDescription(testExpectedBortle2));
-            test2.RawMilicandella.Should().Be(expectedMillicandella2);
+            Math.Round(test2.RawMilicandella, 3).Should().Be(Math.Round(expectedMillicandella2, 3));
+        }
+
+        /// <summary>
+        /// Tests that reading data that lies outside of the dataset throws an error.
+        ///
+        /// CRS	EPSG:4326 - WGS 84 - Geographic
+        /// Extent	-180.0000000000000000,-59.9957751150000007 : 179.9998560000000225,85.0541668649999991
+        /// </summary>
+        [TestMethod]
+        public void ReadLightPollutionOutsideOfDatasetTest()
+        {
+            // Arrange
+            this.SetupMockFilesystemToReadDataset();
+
+            // +ve latitude out of range
+            const float testLongitude1 = 0f;
+            const float testLatitude1 = 86f;
+            // -ve latitude out of range
+            const float testLongitude2 = 0f;
+            const float testLatitude2 = -61f;
+
+            // +ve longitude out of range
+            const float testLongitude3 = 180.5f;
+            const float testLatitude3 = 0f;
+            // -ve longitude out of range
+            const float testLongitude4 = -180.5f;
+            const float testLatitude4 = 0f;
+
+            // Act
+            this.CreateSut();
+
+            // Assert
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+                this._sut.GetLightPollutionForCoords(testLongitude1, testLatitude1));
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+                this._sut.GetLightPollutionForCoords(testLongitude2, testLatitude2));
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+                this._sut.GetLightPollutionForCoords(testLongitude3, testLatitude3));
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+                this._sut.GetLightPollutionForCoords(testLongitude4, testLatitude4));
         }
 
         /// <summary>

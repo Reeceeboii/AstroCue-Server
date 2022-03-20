@@ -21,4 +21,8 @@
     <ProjectReference Include="..\AstroCue.Server\AstroCue.Server.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Astronomy\" />
+  </ItemGroup>
+
 </Project>

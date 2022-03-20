@@ -9,11 +9,11 @@
     public static class Bortle
     {
         /// <summary>
-        /// Converts a millicandela/m^2 value to a Bortle scale value. Uses the International Year of Astronomy's
+        /// Converts a milicandela/m^2 value to a Bortle scale value. Uses the International Year of Astronomy's
         /// Sky Brightness Nomogram (http://www.darkskiesawareness.org/img/sky-brightness-nomogram.gif) for an approximate
         /// conversion
         /// </summary>
-        /// <param name="mcdM2">A millicandella/m^2 value</param>
+        /// <param name="mcdM2">A milicandella/m^2 value</param>
         /// <returns>The value's approximate Bortle scale value</returns>
         public static int McdM2ToBortle(float mcdM2)
         {
