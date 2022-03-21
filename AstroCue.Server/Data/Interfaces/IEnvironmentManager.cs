@@ -1,7 +1,8 @@
 ﻿namespace AstroCue.Server.Data.Interfaces
 {
     /// <summary>
-    /// Interface for <see cref="EnvironmentManager"/>
+    /// Interface for <see cref="EnvironmentManager"/>.
+    /// Allows dependency injection and mocking of environment variables and API URLs
     /// </summary>
     public interface IEnvironmentManager
     {
@@ -29,5 +30,15 @@
         /// Gets the base messages URL for the MailGun API
         /// </summary>
         string BaseMailGunMessagesUrl { get; }
+
+        /// <summary>
+        /// Base URL of the MapBox forward geocoding API endpoint
+        /// </summary>
+        string BaseMapBoxForwardGeocodeUrl { get; }
+
+        /// <summary>
+        /// Base URL of the MapBox static map images API endpoint
+        /// </summary>
+        string BaseMapBoxStaticMapsUrl { get; }
     }
 }

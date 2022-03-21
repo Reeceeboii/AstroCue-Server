@@ -53,7 +53,7 @@
         /// Tests that errors are thrown from missing parameters
         /// </summary>
         [TestMethod]
-        public void NewClientMissingParametersTest()
+        public void NewClientWithBasicAuthMissingParametersTest()
         {
             // Arrange
             // Act
@@ -61,6 +61,21 @@
 
             // Assert
             Assert.ThrowsException<UriFormatException>(() => this._sut.NewClientBasicAuth(string.Empty, string.Empty));
+        }
+
+        /// <summary>
+        /// Tests that a plain new <see cref="RestClient"/> instance can be created
+        /// </summary>
+        [TestMethod]
+        public void NewClientTest()
+        {
+            // Arrange
+            // Act
+            this.CreateSut();
+            RestClient client = this._sut.NewClient();
+
+            // Assert
+            client.Should().NotBeNull();
         }
 
         /// <summary>

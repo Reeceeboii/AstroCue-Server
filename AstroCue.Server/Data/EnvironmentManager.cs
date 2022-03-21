@@ -23,6 +23,8 @@
             this._configuration = configuration;
         }
 
+        #region Environment Variables
+
         /// <summary>
         /// Gets the server's JSON web token encryption secret from the environment
         /// </summary>
@@ -43,9 +45,25 @@
         /// </summary>
         public string MailGunApiKey => this._configuration["MailGun:APIKey"];
 
+        #endregion
+
+        #region Base API URLs
+
         /// <summary>
         /// Gets the base messages URL for the MailGun API
         /// </summary>
         public string BaseMailGunMessagesUrl => "https://api.eu.mailgun.net/v3";
+
+        /// <summary>
+        /// Base URL of the MapBox forward geocoding API endpoint
+        /// </summary>
+        public string BaseMapBoxForwardGeocodeUrl => "https://api.mapbox.com/geocoding/v5/mapbox.places/";
+
+        /// <summary>
+        /// Base URL of the MapBox static map images API endpoint
+        /// </summary>
+        public string BaseMapBoxStaticMapsUrl => "";
+
+        #endregion
     }
 }

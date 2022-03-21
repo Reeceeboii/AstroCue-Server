@@ -38,7 +38,7 @@
         /// <summary>
         /// Mock <see cref="IHttpClientService"/> instance used by the tests
         /// </summary>
-        private readonly Mock<IHttpClientService> _mockHttpClientOptsService;
+        private readonly Mock<IHttpClientService> _mockHttpClientService;
 
         /// <summary>
         /// Mock <see cref="IMapper"/> instance used by the tests
@@ -72,7 +72,7 @@
         public EmailServiceTests()
         {
             this._mockEnvironmentManager = new Mock<IEnvironmentManager>();
-            this._mockHttpClientOptsService = new Mock<IHttpClientService>();
+            this._mockHttpClientService = new Mock<IHttpClientService>();
             this._mockMapper = new Mock<IMapper>();
 
             this._mockHttpMessageHandler = new MockHttpMessageHandler();
@@ -86,7 +86,7 @@
             HttpClient client = this._mockHttpMessageHandler.ToHttpClient();
             client.BaseAddress = new Uri(FakeBaseApiUrl);
 
-            this._mockHttpClientOptsService
+            this._mockHttpClientService
                 .Setup(i => i.NewClientBasicAuth(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(new RestClient(client, opts)
                 {
@@ -142,7 +142,8 @@
                 .WithFormData(new Dictionary<string, string>
                 {
                     { "to", user.EmailAddress },
-                    { "from", "AstroCue <no-reply@astrocue.co.uk>" }
+                    { "from", "AstroCue <no-reply@astrocue.co.uk>" },
+                    { "template", "welcome-template" }
                 })
                 .Respond(HttpStatusCode.OK);
 
@@ -162,7 +163,7 @@
         {
             this._sut = new EmailService(
                 this._mockEnvironmentManager.Object,
-                this._mockHttpClientOptsService.Object,
+                this._mockHttpClientService.Object,
                 this._mockMapper.Object);
         }
     }

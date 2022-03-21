@@ -11,6 +11,15 @@
     public class HttpClientService : IHttpClientService
     {
         /// <summary>
+        /// Create a new <see cref="RestClient"/>
+        /// </summary>
+        /// <returns>A new <see cref="RestClient"/> instance</returns>
+        public RestClient NewClient()
+        {
+            return new RestClient();
+        }
+
+        /// <summary>
         /// Create a new <see cref="RestClient"/> with basic HTTP authentication
         /// </summary>
         /// <param name="apiKey">The API key</param>
