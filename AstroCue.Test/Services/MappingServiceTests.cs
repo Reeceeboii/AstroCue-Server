@@ -129,11 +129,11 @@
             
             // queries > 20 words not allowed
             Assert.ThrowsException<AggregateException>(() =>
-                this._sut.ForwardGeocode(string.Concat(Enumerable.Repeat("word ", 21))).Result);
+                this._sut.ForwardGeocodeAsync(string.Concat(Enumerable.Repeat("word ", 21))).Result);
 
             // semi colons not allowed in queries
             Assert.ThrowsException<AggregateException>(() =>
-                this._sut.ForwardGeocode("some query with illegal character ;").Result);
+                this._sut.ForwardGeocodeAsync("some query with illegal character ;").Result);
         }
 
         /// <summary>
@@ -154,7 +154,7 @@
 
             // Act
             this.CreateSut();
-            IList<FwdGeocodeResult> res = this._sut.ForwardGeocode("test").Result;
+            IList<FwdGeocodeResult> res = this._sut.ForwardGeocodeAsync("test").Result;
 
             // Assert
             this._mockHttpMessageHandler.GetMatchCount(mockedRequest).Should().Be(1);
@@ -192,7 +192,7 @@
 
             // Act
             this.CreateSut();
-            byte[] image = this._sut.GetStaticMapImage(testLongitude, testLatitude).Result;
+            byte[] image = this._sut.GetStaticMapImageAsync(testLongitude, testLatitude).Result;
 
             // Assert
             image.Length.Should().Be(imageByteStream.Length);

@@ -40,5 +40,10 @@
         /// Base URL of the MapBox static map images API endpoint
         /// </summary>
         string BaseMapBoxStaticMapsUrl { get; }
+
+        /// <summary>
+        /// Base URL of the OpenWeatherMap current weather URL endpoint
+        /// </summary>
+        string BaseOwmCurrentWeatherUrl { get; }
     }
 }

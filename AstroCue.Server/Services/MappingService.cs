@@ -59,7 +59,7 @@
         /// <returns>A list of <see cref="FwdGeocodeResult"/> instances</returns>
         /// <exception cref="ArgumentOutOfRangeException">If the query is out of MapBox's expected range of words/chars</exception>
         /// <exception cref="ArgumentException">If the query contains any illegal characters (i.e. a semicolon)</exception>
-        public async Task<IList<FwdGeocodeResult>> ForwardGeocode(string query)
+        public async Task<IList<FwdGeocodeResult>> ForwardGeocodeAsync(string query)
         {
             // Validate query against https://docs.mapbox.com/api/search/geocoding/#forward-geocoding
             query = query.Trim();
@@ -106,7 +106,7 @@
         /// <param name="longitude">The longitude of the map</param>
         /// <param name="latitude">The latitude of the map</param>
         /// <returns>A byte array representing the contents of the image</returns>
-        public async Task<byte[]> GetStaticMapImage(float longitude, float latitude)
+        public async Task<byte[]> GetStaticMapImageAsync(float longitude, float latitude)
         {
             RestRequest req = new(this.GenStaticMapImageUrl(longitude, latitude));
             req.AddParameter("access_token", this._environmentManager.MapBoxApiKey);

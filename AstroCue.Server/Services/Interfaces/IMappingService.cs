@@ -17,7 +17,7 @@
         /// <returns>A list of <see cref="FwdGeocodeResult"/> instances</returns>
         /// <exception cref="ArgumentOutOfRangeException">If the query is out of MapBox's expected range of words/chars</exception>
         /// <exception cref="ArgumentException">If the query contains any illegal characters (i.e. a semicolon)</exception>
-        Task<IList<FwdGeocodeResult>> ForwardGeocode(string query);
+        Task<IList<FwdGeocodeResult>> ForwardGeocodeAsync(string query);
 
         /// <summary>
         /// Get a static map image from the MapBox API
@@ -25,6 +25,6 @@
         /// <param name="longitude">The longitude of the map</param>
         /// <param name="latitude">The latitude of the map</param>
         /// <returns>A byte array representing the contents of the image</returns>
-        Task<byte[]> GetStaticMapImage(float longitude, float latitude);
+        Task<byte[]> GetStaticMapImageAsync(float longitude, float latitude);
     }
 }
