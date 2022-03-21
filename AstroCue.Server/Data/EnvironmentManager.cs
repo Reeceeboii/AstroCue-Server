@@ -45,7 +45,7 @@
         /// </summary>
         public string MailGunApiKey => this._configuration["MailGun:APIKey"];
 
-        #endregion
+        #endregion // Environment Variables
 
         #region Base API URLs
 
@@ -62,8 +62,13 @@
         /// <summary>
         /// Base URL of the MapBox static map images API endpoint
         /// </summary>
-        public string BaseMapBoxStaticMapsUrl => "";
+        public string BaseMapBoxStaticMapsUrl => "https://api.mapbox.com/styles/v1/mapbox/dark-v10/static/";
 
-        #endregion
+        /// <summary>
+        /// Base URL of the OpenWeatherMap current weather URL endpoint
+        /// </summary>
+        public string BaseOwmCurrentWeatherUrl => "https://api.openweathermap.org/data/2.5/weather/";
+
+        #endregion // Base API URLs
     }
 }
