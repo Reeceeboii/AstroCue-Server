@@ -137,6 +137,9 @@ namespace AstroCue.Server
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IAstroCueUserService, AstroCueUserService>();
+            services.AddScoped<IMappingService, MappingService>();
+            services.AddScoped<ILightPollutionService, LightPollutionService>();
+            services.AddScoped<IWeatherForecastService, WeatherForecastService>();
         }
 
         /// <summary>
