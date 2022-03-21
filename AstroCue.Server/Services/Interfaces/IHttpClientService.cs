@@ -8,6 +8,12 @@
     public interface IHttpClientService
     {
         /// <summary>
+        /// Create a new <see cref="RestClient"/>
+        /// </summary>
+        /// <returns>A new <see cref="RestClient"/> instance</returns>
+        RestClient NewClient();
+
+        /// <summary>
         /// Create a new <see cref="RestClient"/> with basic HTTP authentication
         /// </summary>
         /// <param name="apiKey">The API key</param>
