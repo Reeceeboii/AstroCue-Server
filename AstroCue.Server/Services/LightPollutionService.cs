@@ -102,7 +102,7 @@
         /// <param name="band">Instance of <see cref="Band"/></param>
         /// <param name="xOffset">X offset value, in pixels</param>
         /// <param name="yOffset">Y offset value, in pixels</param>
-        /// <returns></returns>
+        /// <returns>A bool representing whether or not the x and y offsets are out of bounds</returns>
         private static bool OffsetsOutOfBounds(Band band, int xOffset, int yOffset)
         {
             if (xOffset < 0 || xOffset > band.XSize)
