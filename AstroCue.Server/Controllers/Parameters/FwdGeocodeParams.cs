@@ -1,4 +1,4 @@
-﻿ namespace AstroCue.Server.Controllers.GeographicController
+﻿ namespace AstroCue.Server.Controllers.Parameters
 {
     using System.ComponentModel.DataAnnotations;
 

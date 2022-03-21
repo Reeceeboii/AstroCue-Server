@@ -1,4 +1,4 @@
-﻿namespace AstroCue.Server.Controllers.GeographicController
+﻿namespace AstroCue.Server.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -8,6 +8,7 @@
     using Microsoft.AspNetCore.Mvc;
     using Models.API.Outbound;
     using Models.Misc;
+    using Parameters;
     using Services.Interfaces;
     using Swashbuckle.AspNetCore.Annotations;
 
