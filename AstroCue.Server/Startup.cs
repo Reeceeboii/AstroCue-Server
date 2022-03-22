@@ -18,6 +18,7 @@ namespace AstroCue.Server
     using Microsoft.IdentityModel.Tokens;
     using Microsoft.OpenApi.Models;
     using Services;
+    using Services.DevelopmentServices;
     using Services.Interfaces;
     using Utilities;
 
@@ -133,8 +134,17 @@ namespace AstroCue.Server
 
             services.AddSingleton(mapperConfiguration.CreateMapper());
 
+            // register development services
+            if (this.Environment.IsDevelopment())
+            {
+                services.AddScoped<IEmailService, DevEmailService>();
+            }
+            else
+            {
+                services.AddScoped<IEmailService, EmailService>();
+            }
+
             services.AddScoped<IHttpClientService, HttpClientService>();
-            services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IAstroCueUserService, AstroCueUserService>();
             services.AddScoped<IMappingService, MappingService>();
