@@ -52,7 +52,7 @@
         [SwaggerResponse(StatusCodes.Status200OK, "The request completed successfully", typeof(IList<FwdGeocodeResult>))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "There was something wrong with the request. Check the parameters.", typeof(OutboundErrorModel))]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, "Internal server error", typeof(OutboundErrorModel))]
-        public async Task<IActionResult> ForwardGeocode(
+        public async Task<ActionResult<IList<FwdGeocodeResult>>> ForwardGeocode(
             [FromQuery, SwaggerParameter("Search query", Required = true)] FwdGeocodeParams parameters)
         {
             if (!this.ModelState.IsValid)
@@ -66,14 +66,7 @@
             {
                 features = await this._mappingService.ForwardGeocodeAsync(parameters.Query);
             }
-            catch (ArgumentOutOfRangeException exc)
-            {
-                return this.StatusCode(StatusCodes.Status400BadRequest, new OutboundErrorModel
-                {
-                    Message = exc.Message
-                });
-            }
-            catch (ArgumentException exc)
+            catch (Exception exc) when(exc is ArgumentException or ArgumentOutOfRangeException)
             {
                 return this.StatusCode(StatusCodes.Status400BadRequest, new OutboundErrorModel
                 {
