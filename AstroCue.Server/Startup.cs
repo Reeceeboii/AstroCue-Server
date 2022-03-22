@@ -140,6 +140,7 @@ namespace AstroCue.Server
             services.AddScoped<IMappingService, MappingService>();
             services.AddScoped<ILightPollutionService, LightPollutionService>();
             services.AddScoped<IWeatherForecastService, WeatherForecastService>();
+            services.AddScoped<IObservationLocationService, ObservationLocationService>();
         }
 
         /// <summary>

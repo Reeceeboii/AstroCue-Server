@@ -21,8 +21,8 @@
             this.CreateMap<AstroCueUser, OutboundAuthSuccessModel>();
 
             // observation locations
-            //this.CreateMap<InboundObservationLocationModel, ObservationLocation>();
-            //this.CreateMap<ObservationLocation, OutboundObsLocationModel>();
+            this.CreateMap<InboundObsLocationModel, ObservationLocation>();
+            this.CreateMap<ObservationLocation, OutboundObsLocationModel>();
 
             // email models
             this.CreateMap<AstroCueUser, WelcomeEmailModel>();
