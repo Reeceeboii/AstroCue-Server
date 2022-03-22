@@ -93,7 +93,6 @@
                 return null;
             }
 
-
             loc.Name = StringUtilities.TrimToUpperFirstChar(loc.Name);
             loc.BortleScaleValue = pollution.BortleValue;
             loc.BortleDesc = pollution.BortleDesc;
