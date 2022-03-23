@@ -45,16 +45,19 @@
         /// on the visibility of an object based on the location provided via
         /// the locationId provided in the request
         /// </summary>
+        [Required]
         public bool VisibilityAlert { get; set; }
         
         /// <summary>
         /// Gets or sets a message regarding the visibility of the object
         /// </summary>
+        [Required]
         public string VisibilityMessage { get; set; }
 
         /// <summary>
         /// Gets or sets a link where users can discover more information about the object
         /// </summary>
+        [Required]
         public string MoreInformation { get; set; }
     }
 }
