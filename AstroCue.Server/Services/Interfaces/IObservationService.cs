@@ -17,5 +17,14 @@
         /// <returns>A list of <see cref="OutboundAstronomialObjectModel"/> instances
         /// that match the search queries</returns>
         IList<OutboundAstronomialObjectModel> ObjectSearch(AstronomicalObjectSearchParams searchParams, int reqUserId);
+
+        /// <summary>
+        /// Set up a new observation between a location and an astronomical object
+        /// </summary>
+        /// <param name="locationId">The ID of the location where the observation will take place</param>
+        /// <param name="astronomicalObjectId">The ID of the astronomical object that is being observed</param>
+        /// <param name="reqUserId">The ID of the user that made the request</param>
+        /// <returns>An instance of <see cref="OutboundObservationModel"/></returns>
+        OutboundObservationModel NewObservation(int locationId, int astronomicalObjectId, int reqUserId);
     }
 }

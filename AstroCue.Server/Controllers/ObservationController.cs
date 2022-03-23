@@ -5,6 +5,7 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+    using Models.API.Inbound;
     using Models.API.Outbound;
     using Parameters;
     using Services.Interfaces;
@@ -37,12 +38,10 @@
         [Route("object-search")]
         [SwaggerOperation(
             Summary = "Astronomical object search",
-            Description = "Search for astronomical objects using a mixture of queries and flags")
-        ]
+            Description = "Search for astronomical objects using a mixture of queries and flags")]
         [SwaggerResponse(
             StatusCodes.Status200OK, 
-            "Search was successful", typeof(IList<OutboundAstronomialObjectModel>))
-        ]
+            "Search was successful", typeof(IList<OutboundAstronomialObjectModel>))]
         [SwaggerResponse(
             StatusCodes.Status400BadRequest,
             "There was an issue with the query parameters", typeof(OutboundErrorModel))]
@@ -66,6 +65,39 @@
             }
 
             return this.Ok(objects);
+        }
+
+        [HttpPost]
+        [Route("new")]
+        [SwaggerOperation(
+            Summary = "New astronomical observation",
+            Description =
+                "Creates a new observation using the ID of an observation location and an astronomical object")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Observation created", typeof(OutboundObservationModel))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Bad request", typeof(OutboundErrorModel))]
+        public IActionResult NewObservation(
+            [FromBody] InboundObservationModel observationModel)
+        {
+            int reqUserId = (int)this.HttpContext.Items[Constants.HttpContextReqUserId]!;
+
+            OutboundObservationModel observation;
+
+            try
+            {
+                observation = this._observationService.NewObservation(
+                    observationModel.LocationId,
+                    observationModel.AstronomicalObjectId,
+                    reqUserId);
+            }
+            catch(ArgumentException exc)
+            {
+                return this.StatusCode(StatusCodes.Status400BadRequest, new OutboundErrorModel()
+                {
+                    Message = exc.Message
+                });
+            }
+
+            return this.Ok(observation);
         }
     }
 }

@@ -76,8 +76,8 @@
                 query = query.Where(obj => obj.OfficiallyNamed);
             }
 
-            // apply search term, using prefix wildcard for efficient indexing
-            string searchTerm = $"{searchParams.Query.Trim()}%";
+            // using a non prefix wildcard isn't as efficient but so be it
+            string searchTerm = $"%{searchParams.Query.Trim()}%";
             query = query
                 .Where(obj => EF.Functions.Like(obj.Name, searchTerm));
 
@@ -95,7 +95,7 @@
                     ? $"http://cdsportal.u-strasbg.fr/?target=hip+{model.CatalogueIdentifier}"
                     : $"http://cdsportal.u-strasbg.fr/?target=ngc+{model.CatalogueIdentifier}";
 
-                // if the location was set from SingleOrDefault
+                // if the location was not set from SingleOrDefault
                 if (loc.Id <= 0) continue;
 
                 if (model.ApparentMagnitude > BortleScale.ScaleToNakedEyeLimitingMagnitude(loc.BortleScaleValue))
@@ -108,11 +108,56 @@
                 else
                 {
                     model.VisibilityAlert = false;
-                    model.VisibilityMessage = $"This object is bright enough to be seen from {loc.Name}";
+                    model.VisibilityMessage = $"This object is bright enough to be seen from {loc.Name}!";
                 }
             }
 
             return outbounds;
+        }
+
+        /// <summary>
+        /// Set up a new observation between a location and an astronomical object
+        /// </summary>
+        /// <param name="locationId">The ID of the location where the observation will take place</param>
+        /// <param name="astronomicalObjectId">The ID of the astronomical object that is being observed</param>
+        /// <param name="reqUserId">The ID of the user that made the request</param>
+        /// <returns></returns>
+        public OutboundObservationModel NewObservation(int locationId, int astronomicalObjectId, int reqUserId)
+        {
+            ObservationLocation loc = this._context.ObservationLocations
+                .Include(l => l.Observations)
+                .SingleOrDefault(l => l.AstroCueUserId == reqUserId && l.Id == locationId);
+
+            AstronomicalObject obj = this._context.AstronomicalObjects
+                .SingleOrDefault(obj => obj.Id == astronomicalObjectId);
+
+            if (loc == null)
+            {
+                throw new ArgumentException("No location with given ID on user account", nameof(reqUserId));
+            }
+
+            if (obj == null)
+            {
+                throw new ArgumentException("No astronomical object with ID", nameof(astronomicalObjectId));
+            }
+
+            // check for duplicates
+            if (loc.Observations.Any(o => o.AstronomicalObjectId == astronomicalObjectId))
+            {
+                throw new ArgumentException($"You already have an observation between {obj.Name} and {loc.Name}!");
+            }
+
+            Observation newObs = new()
+            {
+                ObservationLocation = loc,
+                ObservationLocationId = loc.Id,
+                AstronomicalObject = obj,
+                AstronomicalObjectId = astronomicalObjectId
+            };
+
+            loc.Observations.Add(newObs);
+
+            return this._context.SaveChanges() == 1 ? this._mapper.Map<OutboundObservationModel>(newObs) : null;
         }
     }
 }
