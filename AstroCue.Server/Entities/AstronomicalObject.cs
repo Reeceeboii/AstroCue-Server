@@ -22,11 +22,24 @@
         public int CatalogueIdentifier { get; set; }
 
         /// <summary>
-        /// Gets or sets the name for a star (i.e. Polaris, Betelgeuse etc...). As only a tiny fraction of stars
-        /// have officially recognised names, this prop is nullable and will be so for an overwhelmingly large
-        /// percentage of entries
+        /// Gets or sets the name for the object (i.e. Polaris, Betelgeuse, Box Nebula etc...). As only a tiny fraction of objects
+        /// have officially recognised names, this prop will be the catalogue + identifier in most cases (i.e.
+        /// HIP xxxxx, NGC xxxxx etc...)
         /// </summary>
+        [Required]
         public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets a boolean representing whether or not the object is officially named
+        /// </summary>
+        [Required]
+        public bool OfficiallyNamed { get; set; }
+
+        /// <summary>
+        /// Gets or sets the type of the object  
+        /// </summary>
+        [Required]
+        public string Type { get; set; }
 
         /// <summary>
         /// Gets or sets the right ascension (Ra) for the object, measured in Hours|Minutes|Seconds from epoch J2000.0
@@ -61,20 +74,16 @@
         public override string ToString()
         {
             if (this.GetType() == typeof(HipObject))
-            {
-                return this.Name != null
-                    ? $"HIP {this.CatalogueIdentifier} | {this.Name}"
-                    : $"HIP {this.CatalogueIdentifier}";
+            { 
+                return $"HIP {this.CatalogueIdentifier}";
             }
 
             if (this.GetType() == typeof(NgcObject))
             {
-                return this.Name != null
-                    ? $"NGC {this.CatalogueIdentifier} | {this.Name}"
-                    : $"NGC {this.CatalogueIdentifier}";
+                return $"NGC {this.CatalogueIdentifier}";
             }
 
-            return typeof(AstronomicalObject).ToString();
+            return string.Empty;
         }
     }
 }

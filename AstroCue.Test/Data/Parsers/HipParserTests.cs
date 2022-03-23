@@ -128,9 +128,14 @@
 
             result.Count.Should().Be(this._correctlyFormattedCatalogue.Length);
 
-            result[0].Name.Should().Be(null);
+            result[0].Name.Should().Be(result[0].ToString()); // null names replaced with ToString() value
+            result[0].OfficiallyNamed.Should().BeFalse();
+
             result[1].Name.Should().Be("test1");
+            result[1].OfficiallyNamed.Should().BeTrue();
+
             result[2].Name.Should().Be("test2");
+            result[2].OfficiallyNamed.Should().BeTrue();
 
             result[0].RightAscension.Should().NotBeNull();
             result[0].Declination.Should().NotBeNull();
@@ -145,6 +150,11 @@
             result[0].Declination.Seconds.Should().Be(ExpectedDeclinationSeconds);
 
             result[0].ApparentMagnitude.Should().Be(ExpectedApparentMagnitude);
+
+            foreach (AstronomicalObject obj in result)
+            {
+                obj.Type.Should().Be("Star");
+            }
         }
 
         /// <summary>
