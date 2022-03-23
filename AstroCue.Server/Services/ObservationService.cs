@@ -90,7 +90,7 @@
 
             foreach (OutboundAstronomialObjectModel model in outbounds)
             {
-                // Generate a CDS Simbad search link so more information about the object can be found
+                // Generate a CDS Portal search link so more information about the object can be found
                 model.MoreInformation = searchParams.Type == "Star"
                     ? $"http://cdsportal.u-strasbg.fr/?target=hip+{model.CatalogueIdentifier}"
                     : $"http://cdsportal.u-strasbg.fr/?target=ngc+{model.CatalogueIdentifier}";
