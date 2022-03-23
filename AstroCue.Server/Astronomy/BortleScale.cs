@@ -36,7 +36,7 @@
         /// </summary>
         /// <param name="bortle">A Bortle Scale value</param>
         /// <returns>A string representation of the value</returns>
-        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="ArgumentException">If the Bortle Scale value is invalid</exception>
         public static string ScaleToDescription(int bortle)
         {
             return bortle switch
@@ -60,9 +60,9 @@
         /// e.g. for a class 1 Bortle, the NELM is 7.6 - 8.0. Therefore, AstroCue's value is (7.6 + 8.0) / 2 = 7.8
         ///      for class 6, however, 5.5 is the only value provided
         /// </summary>
-        /// <param name="bortle"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        /// <param name="bortle">A Bortle Scale value</param>
+        /// <returns>The value's naked-eye limiting magnitude</returns>
+        /// <exception cref="ArgumentOutOfRangeException">If the Bortle Scale value is invalid</exception>
         public static float ScaleToNakedEyeLimitingMagnitude(int bortle)
         {
             return bortle switch
