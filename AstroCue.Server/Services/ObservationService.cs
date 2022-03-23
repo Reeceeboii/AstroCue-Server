@@ -159,5 +159,46 @@
 
             return this._context.SaveChanges() == 1 ? this._mapper.Map<OutboundObservationModel>(newObs) : null;
         }
+
+        /// <summary>
+        /// Retrieve all of the observations belonging to a certain user
+        /// </summary>
+        /// <param name="reqUserId">The ID of the user that made the request</param>
+        /// <returns>A list of <see cref="OutboundObservationModel"/> instances</returns>
+        public IList<OutboundObservationModel> GetAll(int reqUserId)
+        {
+            IList<Observation> models = this._context.Observations
+                .Include(o => o.ObservationLocation)
+                .Include(o => o.AstronomicalObject)
+                .Where(o => o.ObservationLocation.AstroCueUserId == reqUserId)
+                .ToList();
+
+            return this._mapper.Map<IList<OutboundObservationModel>>(models);
+        }
+
+        /// <summary>
+        /// Delete an existing observation from an account
+        /// </summary>
+        /// <param name="observationId">The ID of the observation to delete</param>
+        /// <param name="reqUserId">The ID of the user that made the request</param>
+        /// <returns>An instance of <see cref="OutboundObservationModel"/></returns>
+        public OutboundObservationModel DeleteObservation(int observationId, int reqUserId)
+        {
+            Observation obs = this._context.Observations
+                .Include(o => o.ObservationLocation)
+                .SingleOrDefault(o => o.Id == observationId && o.ObservationLocation.AstroCueUserId == reqUserId);
+
+            if (obs == null)
+            {
+                throw new ArgumentException("Observation does not exist on this account", nameof(observationId));
+            }
+
+            this._context.Observations.Attach(obs);
+            this._context.Remove(obs);
+
+            return this._context.SaveChanges() == 1
+                ? this._mapper.Map<OutboundObservationModel>(obs)
+                : null;
+        }
     }
 }

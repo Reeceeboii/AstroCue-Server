@@ -13,7 +13,7 @@
         /// Search the database for astronomical objects with a set of parameters
         /// </summary>
         /// <param name="searchParams">An instance of <see cref="AstronomicalObjectSearchParams"/></param>
-        /// <param name="reqUserId">ID of the user that made the request</param>
+        /// <param name="reqUserId">The ID of the user that made the request</param>
         /// <returns>A list of <see cref="OutboundAstronomialObjectModel"/> instances
         /// that match the search queries</returns>
         IList<OutboundAstronomialObjectModel> ObjectSearch(AstronomicalObjectSearchParams searchParams, int reqUserId);
@@ -26,5 +26,20 @@
         /// <param name="reqUserId">The ID of the user that made the request</param>
         /// <returns>An instance of <see cref="OutboundObservationModel"/></returns>
         OutboundObservationModel NewObservation(int locationId, int astronomicalObjectId, int reqUserId);
+
+        /// <summary>
+        /// Retrieve all of the observations belonging to a certain user
+        /// </summary>
+        /// <param name="reqUserId">The ID of the user that made the request</param>
+        /// <returns>A list of <see cref="OutboundObservationModel"/> instances</returns>
+        IList<OutboundObservationModel> GetAll(int reqUserId);
+
+        /// <summary>
+        /// Delete an existing observation from an account
+        /// </summary>
+        /// <param name="observationId">The ID of the observation to delete</param>
+        /// <param name="reqUserId">The ID of the user that made the request</param>
+        /// <returns>An instance of <see cref="OutboundObservationModel"/></returns>
+        OutboundObservationModel DeleteObservation(int observationId, int reqUserId);
     }
 }
