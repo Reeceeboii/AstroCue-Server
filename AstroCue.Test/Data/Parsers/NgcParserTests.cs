@@ -129,8 +129,13 @@
             result.Count.Should().Be(this._correctlyFormattedCatalogue.Length);
 
             result[0].Name.Should().Be("Test1");
+            result[0].OfficiallyNamed.Should().BeTrue();
+
             result[1].Name.Should().Be("Test1");
+            result[1].OfficiallyNamed.Should().BeTrue();
+
             result[2].Name.Should().Be("Test2");
+            result[2].OfficiallyNamed.Should().BeTrue();
 
             ((NgcObject)result[0]).Type.Should().Be("Galaxy");
             ((NgcObject)result[0]).PartOfMultipleSystem.Should().Be(true);

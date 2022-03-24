@@ -77,17 +77,32 @@
                     continue;
                 }
 
+
                 // attempt to extract the IAU name from the dictionary
                 nameDictionary.TryGetValue(catalogueIdentifier, out string name);
 
-                hipparcosObjects.Add(new HipObject()
+                HipObject obj = new()
                 {
                     CatalogueIdentifier = catalogueIdentifier,
                     RightAscension = rightAscension,
                     Declination = declination,
                     ApparentMagnitude = apparentMagnitude,
-                    Name = name // nullable
-                });
+                    Name = name,
+                    Type = "Star"
+                    
+                };
+
+                if (obj.Name == null)
+                {
+                    obj.OfficiallyNamed = false;
+                    obj.Name = obj.ToString();
+                }
+                else
+                {
+                    obj.OfficiallyNamed = true;
+                }
+
+                hipparcosObjects.Add(obj);
             }
 
             return hipparcosObjects;

@@ -53,7 +53,27 @@
             BortleScale.ScaleToDescription(7).Should().Be("Suburban/Urban Transition");
             BortleScale.ScaleToDescription(8).Should().Be("City or inner city sky");
             Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
-                BortleScale.ScaleToDescription(9));
+                BortleScale.ScaleToDescription(20));
+        }
+
+        /// <summary>
+        /// Tests the <see cref="BortleScale.ScaleToNakedEyeLimitingMagnitude"/> method
+        /// </summary>
+        [TestMethod]
+        public void ScaleToNakedEyeLimitingMagnitudeTest()
+        {
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+                BortleScale.ScaleToNakedEyeLimitingMagnitude(0));
+            BortleScale.ScaleToNakedEyeLimitingMagnitude(1).Should().Be(7.8f);
+            BortleScale.ScaleToNakedEyeLimitingMagnitude(2).Should().Be(7.3f);
+            BortleScale.ScaleToNakedEyeLimitingMagnitude(3).Should().Be(6.8f);
+            BortleScale.ScaleToNakedEyeLimitingMagnitude(4).Should().Be(6.3f);
+            BortleScale.ScaleToNakedEyeLimitingMagnitude(5).Should().Be(5.8f);
+            BortleScale.ScaleToNakedEyeLimitingMagnitude(6).Should().Be(5.5f);
+            BortleScale.ScaleToNakedEyeLimitingMagnitude(7).Should().Be(5.0f);
+            BortleScale.ScaleToNakedEyeLimitingMagnitude(8).Should().Be(4.25f);
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
+                BortleScale.ScaleToNakedEyeLimitingMagnitude(20));
         }
     }
 }

@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.IO.Abstractions;
+    using System.Text.RegularExpressions;
     using Entities;
     using Entities.Owned;
 
@@ -55,7 +56,16 @@
             // setup the name dictionary
             foreach (string nameEntry in this.NameCatalogueContent)
             {
-                string name = nameEntry[..35].Trim();
+                string name = nameEntry[..35];
+
+                // Messier object names have extra spaces so let's remove them with this ghastly space-riddled regex
+                Regex rx = new("M....                              ");
+                if (rx.Match(name).Success)
+                {
+                    name = string.Join(" ", name.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries));
+                }
+
+                name = name.Trim();
 
                 string rawId;
 
@@ -145,7 +155,7 @@
 
                 nameDictionary.TryGetValue(catalogueIdentifier, out string name);
 
-                ngcObjects.Add(new NgcObject()
+                NgcObject obj = new()
                 {
                     CatalogueIdentifier = catalogueIdentifier,
                     RightAscension = rightAscension,
@@ -154,7 +164,19 @@
                     Name = name,
                     PartOfMultipleSystem = partOfMultipleSystem,
                     Type = type
-                });
+                };
+
+                if (obj.Name == null)
+                {
+                    obj.OfficiallyNamed = false;
+                    obj.Name = obj.ToString();
+                }
+                else
+                {
+                    obj.OfficiallyNamed = true;
+                }
+
+                ngcObjects.Add(obj);
             }
 
             return ngcObjects;

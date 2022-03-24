@@ -5,6 +5,7 @@
     /// <summary>
     /// Class to handle Bortle Scale operations
     /// https://en.wikipedia.org/wiki/Bortle_scale
+    /// https://skyandtelescope.org/astronomy-resources/light-pollution-and-astronomy-the-bortle-dark-sky-scale/
     /// </summary>
     public static class BortleScale
     {
@@ -32,11 +33,10 @@
 
         /// <summary>
         /// Converts a Bortle Scale value to its string name.
-        /// https://skyandtelescope.org/astronomy-resources/light-pollution-and-astronomy-the-bortle-dark-sky-scale/
         /// </summary>
         /// <param name="bortle">A Bortle Scale value</param>
         /// <returns>A string representation of the value</returns>
-        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="ArgumentException">If the Bortle Scale value is invalid</exception>
         public static string ScaleToDescription(int bortle)
         {
             return bortle switch
@@ -49,6 +49,32 @@
                 6 => "Bright Suburban Sky",
                 7 => "Suburban/Urban Transition",
                 8 => "City or inner city sky",
+                _ => throw new ArgumentOutOfRangeException(nameof(bortle), "Argument out of range")
+            };
+        }
+
+        /// <summary>
+        /// Converts a Bortle Scale value to its NELM (naked-eye limiting magnitude). As the scale
+        /// gives a range for NELM at each scale value (except at class 9 and 6), AstroCue takes the middle of each one.
+        ///
+        /// e.g. for a class 1 Bortle, the NELM is 7.6 - 8.0. Therefore, AstroCue's value is (7.6 + 8.0) / 2 = 7.8
+        ///      for class 6, however, 5.5 is the only value provided
+        /// </summary>
+        /// <param name="bortle">A Bortle Scale value</param>
+        /// <returns>The value's naked-eye limiting magnitude</returns>
+        /// <exception cref="ArgumentOutOfRangeException">If the Bortle Scale value is invalid</exception>
+        public static float ScaleToNakedEyeLimitingMagnitude(int bortle)
+        {
+            return bortle switch
+            {
+                1 => 7.8f,
+                2 => 7.3f,
+                3 => 6.8f,
+                4 => 6.3f,
+                5 => 5.8f,
+                6 => 5.5f,
+                7 => 5.0f,
+                8 => 4.25f,
                 _ => throw new ArgumentOutOfRangeException(nameof(bortle), "Argument out of range")
             };
         }
