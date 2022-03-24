@@ -11,6 +11,7 @@
     using Interfaces;
     using Microsoft.EntityFrameworkCore;
     using Models.API.Outbound;
+    using Models.Misc;
 
     /// <summary>
     /// Service class for handling astronomical observation operations
@@ -98,17 +99,22 @@
                 // if the location was not set from SingleOrDefault
                 if (loc.Id <= 0) continue;
 
+                // apply short visibility report
+                model.LocationVMagReport = new LocationMagnitudeModel();
+
                 if (model.ApparentMagnitude > BortleScale.ScaleToNakedEyeLimitingMagnitude(loc.BortleScaleValue))
                 {
-                    model.VisibilityAlert = true;
-                    model.VisibilityMessage = $"This object is too dim to be seen with with the naked-eye from {loc.Name}, " +
-                                              "however, you may still be able to see it with telescopes, binoculars, or long " +
-                                              "exposure photography";
+                    model.LocationVMagReport.VisibilityAlert = true;
+                    model.LocationVMagReport.VisibilityMessage =
+                        $"This object is too dim to be seen with with the naked-eye from {loc.Name}, " +
+                        "however, you may still be able to see it with telescopes, binoculars, or long " +
+                        "exposure photography";
                 }
                 else
                 {
-                    model.VisibilityAlert = false;
-                    model.VisibilityMessage = $"This object is bright enough to be seen from {loc.Name}!";
+                    model.LocationVMagReport.VisibilityAlert = false;
+                    model.LocationVMagReport.VisibilityMessage =
+                        $"This object is bright enough to be seen from {loc.Name}!";
                 }
             }
 

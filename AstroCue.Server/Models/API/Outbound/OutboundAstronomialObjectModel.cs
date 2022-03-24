@@ -1,5 +1,7 @@
 ﻿namespace AstroCue.Server.Models.API.Outbound
 {
+    using Misc;
+
     /// <summary>
     /// Model class representing an astronomical object
     /// </summary>
@@ -34,16 +36,9 @@
         public float ApparentMagnitude { get; set; }
 
         /// <summary>
-        /// Gets or sets a boolean representing whether or not there is an alert
-        /// on the visibility of an object based on the location provided via
-        /// the locationId provided in the request
+        /// Gets or sets an instance of <see cref="LocationMagnitudeModel"/>
         /// </summary>
-        public bool VisibilityAlert { get; set; }
-        
-        /// <summary>
-        /// Gets or sets a message regarding the visibility of the object
-        /// </summary>
-        public string VisibilityMessage { get; set; }
+        public LocationMagnitudeModel LocationVMagReport { get; set; }
 
         /// <summary>
         /// Gets or sets a link where users can discover more information about the object
