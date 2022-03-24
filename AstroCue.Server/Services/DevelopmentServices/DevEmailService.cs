@@ -21,7 +21,10 @@
         public Task<RestResponse> SendWelcomeEmail(AstroCueUser user)
         {
             Debug.WriteLine("Welcome email sent");
-            return (Task<RestResponse>)Task.CompletedTask;
+            RestResponse resp = new(); 
+            TaskCompletionSource<RestResponse> src = new();
+            src.SetResult(resp);
+            return src.Task;
         }
     }
 }
