@@ -45,5 +45,10 @@
         /// Base URL of the OpenWeatherMap current weather URL endpoint
         /// </summary>
         string BaseOwmCurrentWeatherUrl { get; }
+
+        /// <summary>
+        /// Gets the base URL of the OpenWeatherMap hourly forecast API endpoint
+        /// </summary>
+        string BaseOwnHourlyForecastUrl { get; }
     }
 }

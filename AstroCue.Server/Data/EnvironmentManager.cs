@@ -69,6 +69,11 @@
         /// </summary>
         public string BaseOwmCurrentWeatherUrl => "https://api.openweathermap.org/data/2.5/weather/";
 
+        /// <summary>
+        /// Gets the base URL of the OpenWeatherMap hourly forecast API endpoint
+        /// </summary>
+        public string BaseOwnHourlyForecastUrl => "https://pro.openweathermap.org/data/2.5/forecast/hourly";
+
         #endregion // Base API URLs
     }
 }
