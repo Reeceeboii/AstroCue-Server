@@ -1,6 +1,7 @@
 namespace AstroCue.Server
 {
     using System;
+    using System.Diagnostics;
     using System.IO.Abstractions;
     using System.Text;
     using System.Threading.Tasks;
@@ -8,6 +9,8 @@ namespace AstroCue.Server
     using Data;
     using Data.Interfaces;
     using Entities;
+    using Hangfire;
+    using Hangfire.SqlServer;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -64,6 +67,22 @@ namespace AstroCue.Server
             {
                 options.UseSqlServer(this.Configuration.GetConnectionString("SQLServer"));
             });
+
+            services.AddHangfire(conf => conf
+                .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseRecommendedSerializerSettings()
+                .UseSqlServerStorage(this.Configuration.GetConnectionString("SQLServer"), new SqlServerStorageOptions()
+                {
+                    CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+                    SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                    QueuePollInterval = TimeSpan.Zero,
+                    UseRecommendedIsolationLevel = true,
+                    DisableGlobalLocks = true
+                })
+            );
+
+            services.AddHangfireServer();
 
             services.AddControllers();
 
@@ -158,8 +177,12 @@ namespace AstroCue.Server
         /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline
         /// </summary>
         /// <param name="app">Instance of <see cref="IApplicationBuilder"/></param>
+        /// <param name="backgroundJobs">Instance of <see cref="IBackgroundJobClient"/></param>
         /// <param name="env">Instance of <see cref="IWebHostEnvironment"/></param>
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(
+            IApplicationBuilder app, 
+            IBackgroundJobClient backgroundJobs,
+            IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -184,11 +207,24 @@ namespace AstroCue.Server
             app.UseAuthentication();
             app.UseAuthorization();
 
+            if (env.IsDevelopment())
+            {
+                app.UseHangfireDashboard(options: new DashboardOptions()
+                {
+                    Authorization = new []
+                    {
+                        new HangfireDashAuth()
+                    }
+                });
+            }
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHangfireDashboard();
             });
 
+            // carry out database seeding if it is required
             DataSeeder.SeedAstronomicalCatalogues(app);
         }
     }
