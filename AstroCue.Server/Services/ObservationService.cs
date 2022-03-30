@@ -163,7 +163,9 @@
 
             loc.Observations.Add(newObs);
 
-            return this._context.SaveChanges() == 1 ? this._mapper.Map<OutboundObservationModel>(newObs) : null;
+            return this._context.SaveChanges() == 1 
+                ? this._mapper.Map<OutboundObservationModel>(newObs) 
+                : null;
         }
 
         /// <summary>

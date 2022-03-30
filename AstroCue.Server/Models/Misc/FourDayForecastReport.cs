@@ -12,7 +12,7 @@
         /// Gets or sets a dictionary mapping hourly timestamps to <see cref="HourlyForecast"/>
         /// instances
         /// </summary>
-        public IDictionary<DateTime, HourlyForecast> Forecasts { get; set; }
+        public IDictionary<EqTimeRecord, HourlyForecast> Forecasts { get; set; }
 
         /// <summary>
         /// Gets or sets the sunset timestamp

@@ -40,7 +40,6 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
-    <Folder Include="Res\Email Templates\" />
   </ItemGroup>
 
   <ItemGroup>

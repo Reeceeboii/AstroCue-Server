@@ -65,9 +65,9 @@
 
             return new SingleForecast
             {
-                Description = (string)jObject["weather"][0]["description"],
-                CloudCoveragePercent = (int)jObject["clouds"]["all"],
-                TemperatureCelcius = Convert.ToInt32((int)jObject["main"]["temp"]),
+                Description = (string)jObject["weather"]![0]!["description"],
+                CloudCoveragePercent = (int)jObject["clouds"]!["all"],
+                TemperatureCelcius = Convert.ToInt32((int)jObject["main"]!["temp"]),
                 RetrievedAt = DateTime.Now.ToString("s")
             };
         }
@@ -93,10 +93,10 @@
 
             if (res.Content == null)
             {
-                throw new Exception("Error retrieving forecast information");
+                throw new Exception("Data could not be retrieved");
             }
 
-            Dictionary<DateTime, HourlyForecast> forecasts = new();
+            Dictionary<EqTimeRecord, HourlyForecast> forecasts = new();
             FourDayForecastReport forecast = new();
 
             JObject jObject = JObject.Parse(res.Content);
@@ -114,7 +114,13 @@
                 float probabilityOfPrecipitation = (float)hour["pop"];
                 string description = (string)hour["weather"]![0]!["description"];
 
-                forecasts.Add(time, new HourlyForecast()
+                EqTimeRecord eq = new()
+                {
+                    Day = time.Day,
+                    Hour = time.Hour
+                };
+
+                forecasts.Add(eq, new HourlyForecast()
                 {
                     CloudCoveragePercent = cloudCoveragePercent,
                     TemperatureCelcius = temperatureCelcius,

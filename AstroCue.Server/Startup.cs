@@ -1,7 +1,6 @@
 namespace AstroCue.Server
 {
     using System;
-    using System.Diagnostics;
     using System.IO.Abstractions;
     using System.Text;
     using System.Threading.Tasks;
@@ -171,6 +170,7 @@ namespace AstroCue.Server
             services.AddScoped<IWeatherForecastService, WeatherForecastService>();
             services.AddScoped<IObservationLocationService, ObservationLocationService>();
             services.AddScoped<IObservationService, ObservationService>();
+            services.AddScoped<IReportService, ReportService>();
         }
 
         /// <summary>
@@ -217,6 +217,8 @@ namespace AstroCue.Server
                     }
                 });
             }
+
+            RecurringJob.AddOrUpdate<IReportService>(s => s.GenerateReports(), Cron.Minutely);
 
             app.UseEndpoints(endpoints =>
             {
