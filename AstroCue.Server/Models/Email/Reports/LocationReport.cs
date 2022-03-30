@@ -69,6 +69,11 @@
         public string WeatherWarnings { get; set; }
 
         /// <summary>
+        /// Gets or sets a calendar export link
+        /// </summary>
+        public string CalendarExport { get; set; }
+
+        /// <summary>
         /// Gets or sets a list of <see cref="SingleObjectReport"/> instances
         /// </summary>
         public IList<SingleObjectReport> Objects { get; set; }
