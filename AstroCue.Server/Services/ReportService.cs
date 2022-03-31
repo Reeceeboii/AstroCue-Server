@@ -105,7 +105,7 @@
                     timeOfReportGenUtc = timeOfReportGenUtc.AddSeconds(-timeOfReportGenUtc.Second);
 
                     HourlyForecast best = null;
-                    DateTime timeOfBest = DateTime.Now;
+                    DateTime timeOfBest = DateTime.Now.ToUniversalTime();
                     float bestIndex = 0f;
 
                     DateTime endOfWindow = timeOfReportGenUtc.AddHours(forecastForLocation.Forecasts.Count);

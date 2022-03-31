@@ -12,7 +12,7 @@
         /// <summary>
         /// Given an <see cref="AstronomicalObject"/>, a <see cref="DateTime"/> and a
         /// pair of coordinates representing the observer's location, derive a pair of coordinates
-        /// in the horizontal coordinate system, representing the position of <paramref name="obj"/> at
+        /// in the horizontal coordinate system, representing the apparent position of <paramref name="obj"/> at
         /// instant <paramref name="instant"/>, with the observer's local horizon as the fundamental plane.
         ///
         /// Uses equations 13.5 & 13.6 from Meeus 1998 p. 91-93
@@ -31,14 +31,26 @@
             }
 
             // first, convert the object's Right Ascension and Declination values to degrees
-            double raDeg = obj.RightAscension.Hours + obj.RightAscension.Minutes / 60 +
-                           obj.RightAscension.Seconds / 3600;
+            // (Meeus, 1998, p. 8)
+            double raDeg = (obj.RightAscension.Hours + obj.RightAscension.Minutes / 60.0 +
+                           obj.RightAscension.Seconds / 3600.0) * 15;
 
-            double decDeg = obj.Declination.Degrees + obj.RightAscension.Minutes / 60 +
-                            obj.Declination.Seconds / 3600;
-            
+            // if declination's degrees are negative, all components need to be negated
+            double decDeg;
+            if (obj.Declination.Degrees < 0)
+            {
+                int m = -obj.Declination.Minutes;
+                double s = -obj.Declination.Seconds;
+                decDeg = obj.Declination.Degrees + m / 60.0 + s / 3600.0;
+            }
+            else
+            {
+                int m = obj.Declination.Minutes;
+                double s = obj.Declination.Seconds;
+                decDeg = obj.Declination.Degrees + m / 60.0 + s / 3600.0;
+            }
+
             // and then convert to radians
-            double raRad = DegToRad(raDeg);
             double decRad = DegToRad(decDeg);
 
             // convert observation latitude to radians
@@ -50,18 +62,21 @@
 
             double hourAngleRad = DegToRad(hourAngleDeg);
 
-            // calculate local altitude and azimuth (Meeus 1998, p. 93) equations 13.5 & 13.6
-            double azimuthRad = Math.Sin(hourAngleRad)
-                                / (Math.Cos(hourAngleRad) * Math.Sin(latitudeRad) -
-                                   Math.Tan(decRad) * Math.Cos(latitudeRad));
+            // calculate local apparent altitude and azimuth (Meeus 1998, p. 93) equations 13.5 & 13.6
+            double azimuthRad = Math.Atan2(Math.Sin(hourAngleRad),
+                Math.Cos(hourAngleRad) * Math.Sin(latitudeRad) - Math.Tan(decRad) * Math.Cos(latitudeRad));
 
             double altitudeRad = Math.Sin(latitudeRad) * Math.Sin(decRad) +
                                  Math.Cos(latitudeRad) * Math.Cos(decRad) * Math.Cos(hourAngleRad);
 
+            float az = (float)RadToDeg(azimuthRad);
+            float alt = (float)RadToDeg(Math.Asin(altitudeRad));
+
             AltAz coordinates = new()
             {
-                Azimuth = (float)RadToDeg(Math.Atan(azimuthRad)),
-                Altitude = (float)RadToDeg(Math.Asin(altitudeRad))
+                // derive Azimuth from North instead of South by adding 180 degrees
+                Azimuth = az + 180,
+                Altitude = alt
             };
 
             return coordinates;
@@ -70,6 +85,8 @@
         /// <summary>
         /// Calculates the mean sidereal time at Greenwich for any instant UTC
         /// https://en.wikipedia.org/wiki/Sidereal_time
+        ///
+        /// (Meeus, 1998, p. 87) equations 12.1 and 12.4
         /// </summary>
         /// <param name="instant">A <see cref="DateTime"/> instance in UTC</param>
         /// <returns>Mean sidereal time at Greenwich for the instant given</returns>
@@ -83,7 +100,7 @@
             double jd = DateToJulianDay(instant);
             double t = (jd - 2451545.0) / 36525;
             
-            double mst = 280.46061837 + 360.98564736629 * (jd - 2451545.0) + 0.000387933 * (t * t) - t * t * t / 3871000;
+            double mst = 280.46061837 + 360.98564736629 * (jd - 2451545.0) + 0.000387933 * (t * t) - t * t * t / 38710000;
 
             // bring in range 0-360
             mst = BringInRange360(mst);
@@ -98,7 +115,8 @@
         /// "The Julian Day number or, more simply, the Julian Day (*) (JD) is a continuous
         /// count of days and fractions thereof from the beginning of the year -4712. By tradition,
         /// the Julian Day begins at Greenwich mean noon, that is, at 12h Universal Time."
-        /// (Meeus, 1998, p. 59-66)
+        /// 
+        /// (Meeus, 1998, p. 59-66) equation 7.1
         /// </summary>
         /// <param name="instant">A <see cref="DateTime"/> instance in UTC</param>
         /// <returns>The date's Julian Day</returns>
