@@ -36,6 +36,9 @@
                 CoordinateTransformations.DateToJulianDay(DateTime.Now.AsLocal()));
         }
 
+        /// <summary>
+        /// Tests the <see cref="CoordinateTransformations.MeanSiderealTimeAtInstant"/> method
+        /// </summary>
         [TestMethod]
         public void MeanSiderealTimeAtInstantTest()
         {
