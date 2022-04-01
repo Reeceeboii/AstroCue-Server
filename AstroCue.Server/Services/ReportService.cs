@@ -170,11 +170,16 @@
                     DateTime timeOfBest = DateTime.Now.ToUniversalTime();
                     float bestIndex = 0f;
 
+                    // adjust sunset times for astronomical twilight
+                    // this changes depending on latitude and season, but we can take a rough average https://earthsky.org/earth/twilight-2/
+                    DateTime astronomicalSunset = forecastForLocation.Sunset.AddMinutes(90).ToUniversalTime();
+                    DateTime astronomicalSunrise = forecastForLocation.Sunrise.AddMinutes(-90).ToUniversalTime();
+
                     DateTime endOfWindow = timeOfReportGenUtc.AddHours(forecastForLocation.Forecasts.Count);
                     for (DateTime i = timeOfReportGenUtc; i <= endOfWindow; i = i.AddHours(1))
                     {
                         // if iterated hour does not fall into nighttime
-                        if (!(i.Hour > forecastForLocation.Sunset.Hour || i.Hour < forecastForLocation.Sunrise.Hour))
+                        if (!(i > astronomicalSunset || i < astronomicalSunrise))
                         {
                             continue;
                         }
@@ -326,6 +331,33 @@
         }
 
         /// <summary>
+        /// Delete a report by ID
+        /// </summary>
+        /// <param name="reqUserId">The ID of the user that made the request</param>
+        /// <param name="reportId">The ID of the report that is to be deleted</param>
+        /// <returns><see cref="OutboundReportModel"/></returns>
+        public OutboundReportModel DeleteReport(int reqUserId, int reportId)
+        {
+            AstroCueUser user = this._context.AstroCueUsers
+                .Include(u => u.Reports)
+                .Single(u => u.Id == reqUserId);
+
+            Report targetedForDeletion = user.Reports.SingleOrDefault(r => r.Id == reportId);
+
+            if (targetedForDeletion == null)
+            {
+                throw new Exception($"Report with ID {reportId} does not exist on this account");
+            }
+
+            this._context.Reports.Attach(targetedForDeletion);
+            this._context.Reports.Remove(targetedForDeletion);
+
+            return this._context.SaveChanges() == 1
+                ? this._mapper.Map<OutboundReportModel>(targetedForDeletion)
+                : null;
+        }
+
+        /// <summary>
         /// Generate a Google Calendar export link for an observation
         /// </summary>
         /// <param name="bestTime">An instance of <see cref="DateTime"/></param>
@@ -342,7 +374,7 @@
                 $"Temperature: {forecast.TemperatureCelcius}°C\n" +
                 $"Humidity: {forecast.HumidityPercent}%\n" +
                 $"Wind speed: {forecast.WindSpeedMetersPerSec} m/s\n" +
-                $"Probability of precipitation: {forecast.ProbabilityOfPrecipitation}%z\n\n");
+                $"Probability of precipitation: {forecast.ProbabilityOfPrecipitation}%\n\n");
 
             string location = HttpUtility.UrlEncode($"{observationLocation.Latitude},{observationLocation.Longitude}");
 

@@ -26,5 +26,13 @@
         /// <param name="reqUserId">The ID of the user that made the request</param>
         /// <returns>A list of <see cref="OutboundReportModel"/> instances</returns>
         IList<OutboundReportModel> GetReports(int reqUserId);
+
+        /// <summary>
+        /// Delete a report by ID
+        /// </summary>
+        /// <param name="reqUserId">The ID of the user that made the request</param>
+        /// <param name="reportId">The ID of the report that is to be deleted</param>
+        /// <returns><see cref="OutboundReportModel"/></returns>
+        OutboundReportModel DeleteReport(int reqUserId, int reportId);
     }
 }

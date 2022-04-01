@@ -7,6 +7,7 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Models.API.Outbound;
+    using Parameters;
     using Services.Interfaces;
     using Swashbuckle.AspNetCore.Annotations;
     using Utilities;
@@ -49,6 +50,10 @@
             return this.Ok(this.reportService.GetReports(reqUserId));
         }
 
+        /// <summary>
+        /// Endpoint that allows users to force generation of reports for their observations
+        /// </summary>
+        /// <returns><see cref="StatusCodeResult"/> or an <see cref="OutboundErrorModel"/></returns>
         [HttpPost]
         [Route("force-generate")]
         [SwaggerOperation(
@@ -77,6 +82,50 @@
             {
                 Message = "Email sent!"
             });
+        }
+
+        /// <summary>
+        /// Delete a report from an account by providing its ID
+        /// </summary>
+        /// <param name="idParameter">Instance of <see cref="IdParameter"/></param>
+        /// <returns>An <see cref="OutboundReportModel"/>, or an <see cref="OutboundErrorModel"/></returns>
+        [HttpDelete]
+        [Route("delete")]
+        [SwaggerOperation(
+            Summary = "Delete an observation",
+            Description = "Delete an observation from an account by providing its ID")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Request successful", typeof(OutboundReportModel))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Check parameters", typeof(OutboundErrorModel))]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError, "Internal server error", typeof(OutboundErrorModel))]
+        public IActionResult DeleteReport(
+            [FromQuery, SwaggerParameter("ID", Required = true)]
+            IdParameter idParameter)
+        {
+            int reqUserId = (int)this.HttpContext.Items[Constants.HttpContextReqUserId]!;
+
+            OutboundReportModel report;
+
+            try
+            {
+                report = this.reportService.DeleteReport(reqUserId, idParameter.Id);
+            }
+            catch (Exception exc)
+            {
+                return this.StatusCode(StatusCodes.Status400BadRequest, new OutboundErrorModel()
+                {
+                    Message = exc.Message
+                });
+            }
+
+            if (report == null)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, new OutboundErrorModel()
+                {
+                    Message = "There was an error deleting that report, please try again"
+                });
+            }
+
+            return this.Ok(report);
         }
 
     }
