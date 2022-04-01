@@ -6,11 +6,13 @@
     using System.Threading.Tasks;
     using System.Web;
     using Astronomy;
+    using AutoMapper;
     using Data;
     using Entities;
     using Entities.Owned;
     using Interfaces;
     using Microsoft.EntityFrameworkCore;
+    using Models.API.Outbound;
     using Models.Email.Reports;
     using Models.Misc;
 
@@ -40,22 +42,30 @@
         private readonly IMappingService _mappingService;
 
         /// <summary>
+        /// Instance of <see cref="IMapper"/>
+        /// </summary>
+        private readonly IMapper _mapper;
+
+        /// <summary>
         /// Initialises a new instance of the <see cref="ReportService"/> class
         /// </summary>
         /// <param name="context">Instance of <see cref="ApplicationDbContext"/></param>
         /// <param name="emailService">Instance of <see cref="EmailService"/></param>
         /// <param name="weatherForecastService">Instance of <see cref="IWeatherForecastService"/></param>
         /// <param name="mappingService">Instance of <see cref="IMappingService"/></param>
+        /// <param name="mapper">Instance of <see cref="IMapper"/></param>
         public ReportService(
             ApplicationDbContext context,
             IEmailService emailService,
             IWeatherForecastService weatherForecastService,
-            IMappingService mappingService)
+            IMappingService mappingService,
+            IMapper mapper)
         {
             this._context = context;
             this._emailService = emailService;
             this._weatherForecastService = weatherForecastService;
             this._mappingService = mappingService;
+            this._mapper = mapper;
         }
 
         /// <summary>
@@ -297,6 +307,22 @@
                 // we can email them
                 await this._emailService.SendReportEmail(user, reportList, staticMaps);
             }
+        }
+
+        /// <summary>
+        /// Retrieve all of the reports that belong to a given user
+        /// </summary>
+        /// <param name="reqUserId">The ID of the user that made the request</param>
+        /// <returns>A list of <see cref="OutboundReportModel"/> instances</returns>
+        public IList<OutboundReportModel> GetReports(int reqUserId)
+        {
+            AstroCueUser user = this._context.AstroCueUsers
+                .Include(u => u.Reports
+                    .OrderByDescending(r => r.BestTimeToObserveUtc))
+                .ThenInclude(r => r.ObservationLocation)
+                .Single(u => u.Id == reqUserId);
+
+            return this._mapper.Map<IList<OutboundReportModel>>(user.Reports);
         }
 
         /// <summary>
