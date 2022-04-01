@@ -261,8 +261,8 @@
                                                                 <tr>
                                                                     <td style="padding-right: 0px;padding-left: 0px;" align="center">
 
-                                                                        <img align="center" border="0" src="{{ImageName}}" alt="{{ImageName}}" title="{{ImageName}}" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 100%;max-width: 580px;" width="580" class="v-src-width v-src-max-width" />
-
+                                                                        <img align="center" border="0" src="cid:{{StaticMapImageName}}" alt="map" title="map" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 100%;max-width: 580px;" width="580" class="v-src-width v-src-max-width" />
+                                                                        
                                                                     </td>
                                                                 </tr>
                                                             </table>
@@ -352,9 +352,9 @@
 
                                                             <h3 style="margin: 0px; color: #ffffff; line-height: 140%; text-align: center; word-wrap: break-word; font-weight: normal; font-family: 'Lato',sans-serif; font-size: 14px;">
                                                                 {{Description}}<br />☁️ {{CloudCoveragePercent}}%&nbsp;&nbsp;&nbsp; 🌡️ {{TemperatureCelcius}}&deg;C&nbsp;&nbsp;&nbsp; 💧 {{HumidityPercent}}%&nbsp;&nbsp;&nbsp; 🍃 {{WindSpeedMetersPerSec}}m/s&nbsp;&nbsp;&nbsp; ☔ {{ProbabilityOfPrecipitation}}%<br /><br />
-                                                                {{#if Warning}}
+                                                                {{#if WeatherWarnings}}
                                                                 <!--conditionally rendered weather warning-->
-                                                                ⚠️{{Warning}}⚠️
+                                                                ⚠️{{WeatherWarnings}}⚠️
                                                                 {{/if}}
                                                             </h3>
 
@@ -369,7 +369,7 @@
                                                         <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:'Lato',sans-serif;" align="left">
 
                                                             <div align="center">
-                                                                <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-spacing: 0; border-collapse: collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;font-family:'Lato',sans-serif;"><tr><td style="font-family:'Lato',sans-serif;" align="center"><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://astrocue.com" style="height:43px; v-text-anchor:middle; width:371px;" arcsize="23.5%" stroke="f" fillcolor="#000000"><w:anchorlock/><center style="color:#FFFFFF;font-family:'Lato',sans-serif;"><![endif]-->
+                                                                <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-spacing: 0; border-collapse: collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;font-family:'Lato',sans-serif;"><tr><td style="font-family:'Lato',sans-serif;" align="center"><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="{{CalendarExport}}" style="height:43px; v-text-anchor:middle; width:371px;" arcsize="23.5%" stroke="f" fillcolor="#000000"><w:anchorlock/><center style="color:#FFFFFF;font-family:'Lato',sans-serif;"><![endif]-->
                                                                 <a href="{{CalendarExport}}" target="_blank" style="box-sizing: border-box;display: inline-block;font-family:'Lato',sans-serif;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #FFFFFF; background-color: #000000; border-radius: 10px;-webkit-border-radius: 10px; -moz-border-radius: 10px; width:auto; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;">
                                                                     <span class="v-padding" style="display:block;padding:13px 40px;line-height:120%;"><strong><span style="font-size: 14px; line-height: 16.8px; font-family: Lato, sans-serif;">Add to calendar</span></strong></span>
                                                                 </a>
@@ -411,15 +411,13 @@
                                                     <tr>
                                                         <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:'Lato',sans-serif;" align="left">
                                                             <div style="color: #ffffff; line-height: 140%; text-align: left; word-wrap: break-word;">
-                                                                <p style="font-size: 14px; line-height: 140%; text-align: center;"><span style="text-decoration: underline; font-size: 14px; line-height: 19.6px;"><strong><span style="font-size: 14px; line-height: 19.6px;"><span style="font-size: 12px; line-height: 16.8px;">{{Name}}</span></span></strong></span></p>
+                                                                <p style="font-size: 14px; line-height: 140%; text-align: center;"><span style="text-decoration: underline; font-size: 14px; line-height: 19.6px;"><strong><span style="font-size: 14px; line-height: 19.6px;"><span style="font-size: 12px; line-height: 16.8px;">{{AstronomicalObjectName}}</span></span></strong></span></p>
                                                                 <p style="font-size: 14px; line-height: 140%; text-align: center;"><span style="text-decoration: underline; font-size: 14px; line-height: 19.6px;"><strong><span style="font-size: 14px; line-height: 19.6px;"><span style="font-size: 12px; line-height: 16.8px;">({{Type}})<br /></span></span></strong></span></p>
                                                                 {{#if Warning}}
                                                                 <!--conditionally rendered weather warning-->
                                                                 <p style="font-size: 14px; line-height: 140%; text-align: center;"><span style="font-size: 14px; line-height: 19.6px;"><strong><span style="font-size: 14px; line-height: 19.6px;"><span style="font-size: 12px; line-height: 16.8px;">🛑{{Warning}}<br /></span></span></strong></span></p>
                                                                 {{else}}
                                                                 <p style="font-size: 14px; line-height: 140%; text-align: center;"><span style="font-size: 14px; line-height: 19.6px;"><span style="font-size: 12px; line-height: 16.8px;">alt/az: {{Altitude}}&deg;/{{Azimuth}}&deg;<br /></span></span></p>
-                                                                <p style="font-size: 14px; line-height: 140%; text-align: center;"><span style="font-size: 14px; line-height: 19.6px;"><span style="font-size: 12px; line-height: 16.8px;">Rise: {{Rise}}</span></span></p>
-                                                                <p style="font-size: 14px; line-height: 140%; text-align: center;"><span style="font-size: 14px; line-height: 19.6px;"><span style="font-size: 12px; line-height: 16.8px;">Set: {{Set}}</span></span></p>
                                                                 <p style="font-size: 14px; line-height: 140%; text-align: center;">
                                                                     <span style="font-size: 14px; line-height: 19.6px;">
                                                                         <span style="font-size: 12px; line-height: 16.8px;">

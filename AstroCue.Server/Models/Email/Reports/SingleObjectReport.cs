@@ -27,16 +27,6 @@
         public float Azimuth { get; set; }
 
         /// <summary>
-        /// Gets or sets the object's rise time
-        /// </summary>
-        public string Rise { get; set; }
-
-        /// <summary>
-        /// Gets or sets the object's set time
-        /// </summary>
-        public string Set { get; set; }
-
-        /// <summary>
         /// Gets or sets a warning about the object. This can be null
         /// </summary>
         public string Warning { get; set; }

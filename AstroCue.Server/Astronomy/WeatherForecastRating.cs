@@ -17,7 +17,7 @@
         {
             float index = 0f;
 
-            index += hourlyForecast.CloudCoveragePercent;
+            index += hourlyForecast.CloudCoveragePercent * 2.0f;
             index += hourlyForecast.WindSpeedMetersPerSec;
             index += hourlyForecast.ProbabilityOfPrecipitation;
             index += hourlyForecast.HumidityPercent;

@@ -41,6 +41,11 @@ namespace AstroCue.Server
         }
 
         /// <summary>
+        /// Boolean value representing whether or not development services should be registered
+        /// </summary>
+        private const bool RegisterDeveloperServices = false;
+
+        /// <summary>
         /// Instance of <see cref="IEnvironmentManager"/>
         /// </summary>
         private IEnvironmentManager _environmentManager;
@@ -153,7 +158,7 @@ namespace AstroCue.Server
             services.AddSingleton(mapperConfiguration.CreateMapper());
 
             // register development services
-            if (this.Environment.IsDevelopment())
+            if (RegisterDeveloperServices)
             {
                 services.AddScoped<IEmailService, DevEmailService>();
             }
@@ -218,7 +223,8 @@ namespace AstroCue.Server
                 });
             }
 
-            RecurringJob.AddOrUpdate<IReportService>(s => s.GenerateReports(), Cron.Minutely);
+            //RecurringJob.AddOrUpdate<IReportService>(s => s.GenerateReports(), Cron.Minutely);
+            //backgroundJobs.Enqueue<IReportService>(s => s.GenerateReports());
 
             app.UseEndpoints(endpoints =>
             {

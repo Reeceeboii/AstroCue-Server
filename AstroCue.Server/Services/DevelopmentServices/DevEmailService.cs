@@ -1,9 +1,11 @@
 ﻿namespace AstroCue.Server.Services.DevelopmentServices
 {
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Threading.Tasks;
     using Entities;
     using Interfaces;
+    using Models.Email.Reports;
     using RestSharp;
 
     /// <summary>
@@ -22,6 +24,22 @@
         {
             Debug.WriteLine("Welcome email sent");
             RestResponse resp = new(); 
+            TaskCompletionSource<RestResponse> src = new();
+            src.SetResult(resp);
+            return src.Task;
+        }
+
+        /// <summary>
+        /// Development version of <see cref="IEmailService.SendReportEmail"/>
+        /// </summary>
+        /// <param name="user">An instance of <see cref="AstroCueUser"/></param>
+        /// <param name="reportList">A list of <see cref="LocationReport"/> instances</param>
+        /// <param name="staticMaps">Static map image mappings to their filenames</param>
+        /// <returns>Completed <see cref="Task"/></returns>
+        public Task<RestResponse> SendReportEmail(AstroCueUser user, List<LocationReport> reportList, Dictionary<string, byte[]> staticMaps)
+        {
+            Debug.WriteLine("Report email sent");
+            RestResponse resp = new();
             TaskCompletionSource<RestResponse> src = new();
             src.SetResult(resp);
             return src.Task;

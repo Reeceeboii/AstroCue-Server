@@ -3,13 +3,17 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
+    using System.Web;
     using Astronomy;
     using Data;
     using Entities;
+    using Entities.Owned;
     using Interfaces;
     using Microsoft.EntityFrameworkCore;
     using Models.Email.Reports;
     using Models.Misc;
+    using Newtonsoft.Json;
 
     /// <summary>
     /// Service class for handling the reports
@@ -32,22 +36,30 @@
         private readonly IWeatherForecastService _weatherForecastService;
 
         /// <summary>
+        /// Instance of <see cref="IMappingService"/>
+        /// </summary>
+        private readonly IMappingService _mappingService;
+
+        /// <summary>
         /// Initialises a new instance of the <see cref="ReportService"/> class
         /// </summary>
         /// <param name="context">Instance of <see cref="ApplicationDbContext"/></param>
         /// <param name="emailService">Instance of <see cref="EmailService"/></param>
         /// <param name="weatherForecastService">Instance of <see cref="IWeatherForecastService"/></param>
+        /// <param name="mappingService">Instance of <see cref="IMappingService"/></param>
         public ReportService(
             ApplicationDbContext context,
             IEmailService emailService,
-            IWeatherForecastService weatherForecastService)
+            IWeatherForecastService weatherForecastService,
+            IMappingService mappingService)
         {
             this._context = context;
             this._emailService = emailService;
             this._weatherForecastService = weatherForecastService;
+            this._mappingService = mappingService;
         }
 
-        public void GenerateReports()
+        public async Task GenerateReports()
         {
             IList<AstroCueUser> users = this._context.AstroCueUsers.ToList();
 
@@ -79,23 +91,31 @@
                 }
 
                 List<LocationReport> reportList = new();
+                Dictionary<string, byte[]> staticMaps = new();
 
+                // for every location that the user has created
                 foreach (KeyValuePair<ObservationLocation, IList<Observation>> entry in locToObsMap)
                 {
+                    // fetch weather forecast for location for next n days
                     FourDayForecastReport forecastForLocation =
                         this._weatherForecastService.GetForecastNextFourDays(
                             entry.Key.Longitude,
                             entry.Key.Latitude).Result;
+
+                    // fetch static map image for location and add to dictionary against image name as key
+                    string staticMapImageName = $"location_{entry.Key.Id}.png";
+                    byte[] locStaticMap = this._mappingService.GetStaticMapImageAsync(entry.Key.Longitude, entry.Key.Latitude).Result;
+                    staticMaps.Add(staticMapImageName, locStaticMap);
 
                     LocationReport report = new()
                     {
                         Name = entry.Key.Name,
                         Longitude = entry.Key.Longitude,
                         Latitude = entry.Key.Latitude,
-                        StaticMapImageName = $"location_{entry.Key.Id}.png",
-                        Sunrise = forecastForLocation.Sunrise.ToString("mm:ss tt"),
-                        Sunset = forecastForLocation.Sunset.ToString("mm:ss tt"),
-                        Objects = new List<SingleObjectReport>()
+                        StaticMapImageName = staticMapImageName,
+                        Sunrise = forecastForLocation.Sunrise.ToString("t"),
+                        Sunset = forecastForLocation.Sunset.ToString("t"),
+                        Objects = new List<List<SingleObjectReport>>()
                     };
 
                     DateTime timeOfReportGenUtc = DateTime.UtcNow;
@@ -156,7 +176,8 @@
                         throw new Exception("Best observation time is null");
                     }
 
-                    report.BestTimeToObserve = $"{timeOfBest:dd/mm/yy} @ {timeOfBest:t} (UTC)";
+                    // apply details to report
+                    report.BestTimeToObserve = $"{timeOfBest:M} @ {timeOfBest:t} (UTC)";
                     report.CloudCoveragePercent = best.CloudCoveragePercent;
                     report.TemperatureCelcius = best.TemperatureCelcius;
                     report.HumidityPercent = best.HumidityPercent;
@@ -164,14 +185,88 @@
                     report.ProbabilityOfPrecipitation = best.ProbabilityOfPrecipitation;
                     report.Description = best.Description;
 
+                    report.CalendarExport = GenerateGoogleCalendarExport(timeOfBest, entry.Key, best);
+
                     // apply any warnings
                     if (best.CloudCoveragePercent > 50)
                     {
                         report.WeatherWarnings = "Cloud coverage >50%, observations may be difficult";
                     }
+                    else if (best.CloudCoveragePercent > 90)
+                    {
+                        report.WeatherWarnings = "Cloud coverage >90%, extreme visibility degradation";
+                    }
+
+                    if (best.ProbabilityOfPrecipitation > 50)
+                    {
+                        report.WeatherWarnings += "\nHigh chance of rain";
+                    }
+
+                    List<SingleObjectReport> wholeList = new();
+
+                    // for every observation this location has
+                    foreach (Observation obs in entry.Value)
+                    {
+                        AltAz apparentHorizontalPosition = CoordinateTransformations.EquatorialToHorizontal(
+                            obs.AstronomicalObject,
+                            timeOfBest,
+                            entry.Key.Longitude,
+                            entry.Key.Latitude);
+
+                        wholeList.Add(new SingleObjectReport()
+                        {
+                            Type = obs.AstronomicalObject.Type,
+                            AstronomicalObjectName = obs.AstronomicalObject.Name,
+                            Azimuth = apparentHorizontalPosition.Azimuth,
+                            Altitude = apparentHorizontalPosition.Altitude,
+                            // if object below horizon, apply a warning
+                            Warning = apparentHorizontalPosition.Altitude < 0 ? null : "Not visible"
+                        });
+                    }
+
+                    report.Objects = wholeList
+                        .Select((x, i) => new { Index = i, Value = x })
+                        .GroupBy(x => x.Index / 3)
+                        .Select(x => x.Select(v => v.Value).ToList())
+                        .ToList();
+
+                    // add this location's report
+                    reportList.Add(report);
                 }
 
+                // here, all of the user's locations have had reports generated for all of their objects
+                await this._emailService.SendReportEmail(user, reportList, staticMaps);
             }
+        }
+
+        /// <summary>
+        /// Generate a Google Calendar export link for an observation
+        /// </summary>
+        /// <param name="bestTime">An instance of <see cref="DateTime"/></param>
+        /// <param name="observationLocation">The location of the observation (<see cref="ObservationLocation"/>)</param>
+        /// <param name="forecast">An <see cref="HourlyForecast"/> instance</param>
+        /// <returns>A Google Calendar URL</returns>
+        private static string GenerateGoogleCalendarExport(DateTime bestTime, ObservationLocation observationLocation, HourlyForecast forecast)
+        {
+            string text = HttpUtility.UrlEncode($"AstroCue observation at \"{observationLocation.Name}\"");
+
+            string details = HttpUtility.UrlEncode(
+                $"WEATHER: {forecast.Description}\n\n" +
+                $"Cloud coverage: {forecast.CloudCoveragePercent}%\n" +
+                $"Temperature: {forecast.TemperatureCelcius}°C\n" +
+                $"Humidity: {forecast.HumidityPercent}%\n" +
+                $"Wind speed: {forecast.WindSpeedMetersPerSec} m/s\n" +
+                $"Probability of precipitation: {forecast.ProbabilityOfPrecipitation}%z\n\n");
+
+            string location = HttpUtility.UrlEncode($"{observationLocation.Latitude},{observationLocation.Longitude}");
+
+            string dates = HttpUtility.UrlEncode($"{bestTime:yyyyMMddTHHmmssZ}/{bestTime:yyyyMMddTHHmmssZ}");
+
+            return "https://www.google.com/calendar/render?action=TEMPLATE" +
+                   $"&text={text}" +
+                   $"&details={details}" +
+                   $"&location={location}" +
+                   $"&dates={dates}";
         }
     }
 }

@@ -74,9 +74,9 @@
         public string CalendarExport { get; set; }
 
         /// <summary>
-        /// Gets or sets a list of <see cref="SingleObjectReport"/> instances
+        /// Gets or sets a list of lists of <see cref="SingleObjectReport"/> instances
         /// </summary>
-        public IList<SingleObjectReport> Objects { get; set; }
+        public List<List<SingleObjectReport>> Objects { get; set; }
 
         /// <summary>
         /// Gets or sets the location's sunrise time
