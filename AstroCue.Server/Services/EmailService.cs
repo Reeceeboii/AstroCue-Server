@@ -132,7 +132,9 @@
             req.Resource = "{domain}/messages";
             req.AddParameter("from", "AstroCue <no-reply@astrocue.co.uk>");
             req.AddParameter("to", user.EmailAddress);
-            req.AddParameter("subject", totalReports > 1 ? $"Your {totalReports} reports!" : "Your 1 report!");
+            req.AddParameter("subject", totalReports > 1 
+                ? $"Hi {user.FirstName}, your {totalReports} reports are here!" 
+                : $"Hi {user.FirstName}, report is here!");
             req.AddParameter("template", ReportEmailTemplate);
             req.AddParameter("h:X-Mailgun-Variables", templateData);
 

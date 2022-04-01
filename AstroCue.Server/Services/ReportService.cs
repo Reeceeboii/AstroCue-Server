@@ -13,7 +13,6 @@
     using Microsoft.EntityFrameworkCore;
     using Models.Email.Reports;
     using Models.Misc;
-    using Newtonsoft.Json;
 
     /// <summary>
     /// Service class for handling the reports
@@ -59,10 +58,35 @@
             this._mappingService = mappingService;
         }
 
-        public async Task GenerateReports()
+        /// <summary>
+        /// Main crux of the AstroCue platform - generates astronomical observation reports,
+        /// persists them to the database and emails them to users
+        /// </summary>
+        /// <param name="userIdForceGenerate">An ID given if the report generation process was kicked off manually
+        /// by a user. Defaulted to 0 for all other cases</param>
+        /// <returns><see cref="Task"/></returns>
+        /// <exception cref="Exception">If the report generation process was started manually but the user
+        /// who invoked it has no observations set up on their account</exception>
+        public async Task GenerateReports(int userIdForceGenerate = 0)
         {
-            IList<AstroCueUser> users = this._context.AstroCueUsers.ToList();
+            IList<AstroCueUser> users;
 
+            /*
+             * If a non-zero user ID is provided, reports will be generated for a single
+             * user at the instant the method was invoked, else, standard set time reports
+             * are generated for every user that has observations set up
+             */
+            if (userIdForceGenerate > 0)
+            {
+                users = this._context.AstroCueUsers
+                    .Where(u => u.Id == userIdForceGenerate)
+                    .ToList();
+            }
+            else
+            {
+                users = this._context.AstroCueUsers.ToList();
+            }
+            
             foreach (AstroCueUser user in users)
             {
                 IList<Observation> usersObservations = this._context.Observations
@@ -70,6 +94,14 @@
                     .Include(o => o.AstronomicalObject)
                     .Where(o => o.ObservationLocation.AstroCueUserId == user.Id)
                     .ToList();
+
+                if (userIdForceGenerate > 0)
+                {
+                    if (usersObservations.Count == 0)
+                    {
+                        throw new Exception("You cannot generate reports without having any observations");
+                    }
+                }
 
                 // map observation locations to all of the observations they form a part of
                 IDictionary<ObservationLocation, IList<Observation>> locToObsMap =
@@ -220,8 +252,35 @@
                             Azimuth = apparentHorizontalPosition.Azimuth,
                             Altitude = apparentHorizontalPosition.Altitude,
                             // if object below horizon, apply a warning
-                            Warning = apparentHorizontalPosition.Altitude < 0 ? null : "Not visible"
+                            Warning = apparentHorizontalPosition.Altitude < 0 ? "Not visible" : null
                         });
+
+                        // create a report entity and persist it to the database
+                        string type = obs.AstronomicalObject.Type == "Star" ? "Star" : "DeepSky";
+
+                        Report persistedReport = new()
+                        {
+                            ObservationLocation = entry.Key,
+                            AstroCueUser = user,
+                            AstronomicalObjectName = obs.AstronomicalObject.Name,
+                            BestTimeToObserveUtc = timeOfBest,
+                            HorizontalCoordinates = apparentHorizontalPosition,
+                            WeatherForecast = new WeatherForecast()
+                            {
+                                Description = best.Description,
+                                CloudCoveragePercent = best.CloudCoveragePercent,
+                                TemperatureCelcius = best.TemperatureCelcius,
+                                WindSpeedMetersPerSec = best.WindSpeedMetersPerSec,
+                                ProbabilityOfPrecipitation = best.ProbabilityOfPrecipitation,
+                                HumidityPercent = best.HumidityPercent,
+                                Sunrise = forecastForLocation.Sunrise,
+                                Sunset = forecastForLocation.Sunset
+                            },
+                            MoreInformationUrl = ObservationService.GenerateMoreInformationUrl(type, obs.AstronomicalObject.CatalogueIdentifier)
+                        };
+
+                        this._context.Reports.Add(persistedReport);
+                        this._context.SaveChanges();
                     }
 
                     report.Objects = wholeList
@@ -234,7 +293,8 @@
                     reportList.Add(report);
                 }
 
-                // here, all of the user's locations have had reports generated for all of their objects
+                // here, all of the user's locations have had reports generated for all of their objects, so 
+                // we can email them
                 await this._emailService.SendReportEmail(user, reportList, staticMaps);
             }
         }

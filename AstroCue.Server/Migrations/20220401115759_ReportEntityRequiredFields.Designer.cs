@@ -4,14 +4,16 @@ using AstroCue.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AstroCue.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220401115759_ReportEntityRequiredFields")]
+    partial class ReportEntityRequiredFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -292,27 +294,6 @@ namespace AstroCue.Server.Migrations
                         .WithMany()
                         .HasForeignKey("ObservationLocationId");
 
-                    b.OwnsOne("AstroCue.Server.Entities.Owned.AltAz", "HorizontalCoordinates", b1 =>
-                        {
-                            b1.Property<int>("ReportId")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("int")
-                                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                            b1.Property<float>("Altitude")
-                                .HasColumnType("real");
-
-                            b1.Property<float>("Azimuth")
-                                .HasColumnType("real");
-
-                            b1.HasKey("ReportId");
-
-                            b1.ToTable("Reports");
-
-                            b1.WithOwner()
-                                .HasForeignKey("ReportId");
-                        });
-
                     b.OwnsOne("AstroCue.Server.Entities.Owned.WeatherForecast", "WeatherForecast", b1 =>
                         {
                             b1.Property<int>("ReportId")
@@ -354,9 +335,6 @@ namespace AstroCue.Server.Migrations
                         });
 
                     b.Navigation("AstroCueUser");
-
-                    b.Navigation("HorizontalCoordinates")
-                        .IsRequired();
 
                     b.Navigation("ObservationLocation");
 
