@@ -8,6 +8,8 @@ namespace AstroCue.Server
     using Data;
     using Data.Interfaces;
     using Entities;
+    using Hangfire;
+    using Hangfire.SqlServer;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -39,6 +41,11 @@ namespace AstroCue.Server
         }
 
         /// <summary>
+        /// Boolean value representing whether or not development services should be registered
+        /// </summary>
+        private const bool RegisterDeveloperServices = false;
+
+        /// <summary>
         /// Instance of <see cref="IEnvironmentManager"/>
         /// </summary>
         private IEnvironmentManager _environmentManager;
@@ -64,6 +71,22 @@ namespace AstroCue.Server
             {
                 options.UseSqlServer(this.Configuration.GetConnectionString("SQLServer"));
             });
+
+            services.AddHangfire(conf => conf
+                .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseRecommendedSerializerSettings()
+                .UseSqlServerStorage(this.Configuration.GetConnectionString("SQLServer"), new SqlServerStorageOptions()
+                {
+                    CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+                    SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                    QueuePollInterval = TimeSpan.Zero,
+                    UseRecommendedIsolationLevel = true,
+                    DisableGlobalLocks = true
+                })
+            );
+
+            services.AddHangfireServer();
 
             services.AddControllers();
 
@@ -135,7 +158,7 @@ namespace AstroCue.Server
             services.AddSingleton(mapperConfiguration.CreateMapper());
 
             // register development services
-            if (this.Environment.IsDevelopment())
+            if (RegisterDeveloperServices)
             {
                 services.AddScoped<IEmailService, DevEmailService>();
             }
@@ -152,14 +175,19 @@ namespace AstroCue.Server
             services.AddScoped<IWeatherForecastService, WeatherForecastService>();
             services.AddScoped<IObservationLocationService, ObservationLocationService>();
             services.AddScoped<IObservationService, ObservationService>();
+            services.AddScoped<IReportService, ReportService>();
         }
 
         /// <summary>
         /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline
         /// </summary>
         /// <param name="app">Instance of <see cref="IApplicationBuilder"/></param>
+        /// <param name="backgroundJobs">Instance of <see cref="IBackgroundJobClient"/></param>
         /// <param name="env">Instance of <see cref="IWebHostEnvironment"/></param>
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(
+            IApplicationBuilder app, 
+            IBackgroundJobClient backgroundJobs,
+            IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -184,11 +212,27 @@ namespace AstroCue.Server
             app.UseAuthentication();
             app.UseAuthorization();
 
+            if (env.IsDevelopment())
+            {
+                app.UseHangfireDashboard(options: new DashboardOptions()
+                {
+                    Authorization = new []
+                    {
+                        new HangfireDashAuth()
+                    }
+                });
+            }
+
+            //RecurringJob.AddOrUpdate<IReportService>(s => s.GenerateReports(), Cron.Minutely);
+            //backgroundJobs.Enqueue<IReportService>(s => s.GenerateReports());
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHangfireDashboard();
             });
 
+            // carry out database seeding if it is required
             DataSeeder.SeedAstronomicalCatalogues(app);
         }
     }

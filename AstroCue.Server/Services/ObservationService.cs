@@ -92,9 +92,7 @@
             foreach (OutboundAstronomialObjectModel model in outbounds)
             {
                 // Generate a CDS Portal search link so more information about the object can be found
-                model.MoreInformation = searchParams.Type == "Star"
-                    ? $"http://cdsportal.u-strasbg.fr/?target=hip+{model.CatalogueIdentifier}"
-                    : $"http://cdsportal.u-strasbg.fr/?target=ngc+{model.CatalogueIdentifier}";
+                model.MoreInformation = GenerateMoreInformationUrl(searchParams.Type, model.CatalogueIdentifier);
 
                 // if the location was not set from SingleOrDefault
                 if (loc.Id <= 0) continue;
@@ -163,7 +161,9 @@
 
             loc.Observations.Add(newObs);
 
-            return this._context.SaveChanges() == 1 ? this._mapper.Map<OutboundObservationModel>(newObs) : null;
+            return this._context.SaveChanges() == 1 
+                ? this._mapper.Map<OutboundObservationModel>(newObs) 
+                : null;
         }
 
         /// <summary>
@@ -205,6 +205,19 @@
             return this._context.SaveChanges() == 1
                 ? this._mapper.Map<OutboundObservationModel>(obs)
                 : null;
+        }
+
+        /// <summary>
+        /// Generates a CDS Portal search link so more information about an object can be found
+        /// </summary>
+        /// <param name="objectType">The type of object, "Star", or "DeepSky"</param>
+        /// <param name="catalogueIdentifier">A catalogue identifier for the object</param>
+        /// <returns>A link to the CDS portal for the object provided</returns>
+        public static string GenerateMoreInformationUrl(string objectType, int catalogueIdentifier)
+        {
+            return objectType == "Star"
+                ? $"http://cdsportal.u-strasbg.fr/?target=hip+{catalogueIdentifier}"
+                : $"http://cdsportal.u-strasbg.fr/?target=ngc+{catalogueIdentifier}";
         }
     }
 }

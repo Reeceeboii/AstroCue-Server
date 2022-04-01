@@ -1,13 +1,12 @@
-﻿namespace AstroCue.Server.Entities
+﻿namespace AstroCue.Server.Models.API.Outbound
 {
     using System;
-    using System.ComponentModel.DataAnnotations;
-    using Owned;
+    using Entities.Owned;
 
     /// <summary>
-    /// Entity class representing a report on the best time to go and observe an object
+    /// Model class representing a report sent to a user
     /// </summary>
-    public class Report
+    public class OutboundReportModel
     {
         /// <summary>
         /// Gets or sets the Id  of this observation report
@@ -17,47 +16,32 @@
         /// <summary>
         /// Gets or sets the <see cref="Entities.ObservationLocation"/> navigation property
         /// </summary>
-        public ObservationLocation ObservationLocation { get; set; }
+        public OutboundObsLocationModel ObservationLocation { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the astronomical object that was observed
         /// </summary>
-        [Required]
         public string AstronomicalObjectName { get; set; }
 
         /// <summary>
         /// Gets or sets the best time to observe that was calculated (in UTC)
         /// </summary>
-        [Required]
         public DateTime BestTimeToObserveUtc { get; set; }
 
         /// <summary>
         /// Gets or sets a link where users can discover more information about the object
         /// </summary>
-        [Required]
         public string MoreInformationUrl { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="WeatherForecast"/> at the time of the observation
         /// </summary>
-        [Required]
         public WeatherForecast WeatherForecast { get; set; }
 
         /// <summary>
         /// Gets or sets the horizontal coordinates at which the object was calculated to be at
         /// at the instant of <see cref="BestTimeToObserveUtc"/>
         /// </summary>
-        [Required]
         public AltAz HorizontalCoordinates { get; set; }
-
-        /// <summary>
-        /// Gets or sets the <see cref="Entities.AstroCueUser"/> foreign key
-        /// </summary>
-        public int AstroCueUserId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the <see cref="Entities.AstroCueUser"/> navigation property
-        /// </summary>
-        public AstroCueUser AstroCueUser { get; set; }
     }
 }

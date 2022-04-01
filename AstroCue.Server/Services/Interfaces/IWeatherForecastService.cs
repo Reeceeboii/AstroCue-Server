@@ -15,5 +15,14 @@
         /// <param name="latitude">A latitude</param>
         /// <returns>An instance of <see cref="SingleForecast"/></returns>
         Task<SingleForecast> GetCurrentWeatherAsync(float longitude, float latitude);
+
+        /// <summary>
+        /// Gets a set of weather forecasts for each hour over the next 4 days (for a total of
+        /// 96 individual forecasts)
+        /// </summary>
+        /// <param name="longitude">A longitude</param>
+        /// <param name="latitude">A latitude</param>
+        /// <returns>An instance of <see cref="FourDayForecastReport"/></returns>
+        Task<FourDayForecastReport> GetForecastNextFourDays(float longitude, float latitude);
     }
 }

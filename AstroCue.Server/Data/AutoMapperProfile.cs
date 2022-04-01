@@ -31,6 +31,9 @@
 
             // email models
             this.CreateMap<AstroCueUser, WelcomeEmailModel>();
+
+            // reports
+            this.CreateMap<Report, OutboundReportModel>();
         }
     }
 }
