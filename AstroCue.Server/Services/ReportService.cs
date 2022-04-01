@@ -109,7 +109,7 @@
                 {
                     if (usersObservations.Count == 0)
                     {
-                        throw new Exception("You cannot generate reports without having any observations");
+                        throw new Exception("You need to have at least one observation set up before reports can be created");
                     }
                 }
 

@@ -146,8 +146,6 @@
 
             req.Method = Method.Post;
 
-            RestResponse res = this._client.ExecuteAsync(req).Result;
-
             return await this._client.ExecuteAsync(req);
         }
     }

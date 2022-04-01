@@ -1,6 +1,8 @@
 ﻿namespace AstroCue.Server.Controllers
 {
+    using System;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
@@ -45,6 +47,36 @@
         {
             int reqUserId = (int)this.HttpContext.Items[Constants.HttpContextReqUserId]!;
             return this.Ok(this.reportService.GetReports(reqUserId));
+        }
+
+        [HttpPost]
+        [Route("force-generate")]
+        [SwaggerOperation(
+            Summary = "Generate a new set of reports",
+            Description = "For each observation the user has, generate a report for each one and " +
+                          "email the results to their registered email")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Request successful")]
+        [SwaggerResponse(StatusCodes.Status400BadRequest, "Request failed", typeof(OutboundErrorModel))]
+        public async Task<IActionResult> GenerateReports()
+        {
+            int reqUserId = (int)this.HttpContext.Items[Constants.HttpContextReqUserId]!;
+
+            try
+            {
+                await this.reportService.GenerateReports(reqUserId);
+            }
+            catch (Exception exc)
+            {
+                return this.StatusCode(StatusCodes.Status400BadRequest, new OutboundErrorModel()
+                {
+                    Message = exc.Message
+                });
+            }
+
+            return this.Ok(new
+            {
+                Message = "Email sent!"
+            });
         }
 
     }
