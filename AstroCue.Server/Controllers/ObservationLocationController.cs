@@ -145,8 +145,9 @@
         /// <summary>
         /// Given the ID of an <see cref="ObservationLocation"/>
         /// </summary>
-        /// <param name="locationId"></param>
-        /// <returns></returns>
+        /// <param name="locationId">The ID of the location to retrieve the static map for</param>
+        /// <param name="asBase64">Boolean representing whether or not the image should be sent back in base64 format</param>
+        /// <returns>A static map image from the MapBox API</returns>
         [HttpGet]
         [Route("static-map/{locationId:int}")]
         [SwaggerOperation(
@@ -156,15 +157,35 @@
         [SwaggerResponse(StatusCodes.Status400BadRequest,
             "The location does not exist on the authenticated account",
             typeof(OutboundErrorModel))]
-        public async Task<IActionResult> GetStaticMap(int locationId)
+        public async Task<IActionResult> GetStaticMap(
+            int locationId,
+            [FromQuery, SwaggerParameter(Description = "Retrieve as base 64", Required = false)] bool asBase64)
         {
             int reqUserId = (int)this.HttpContext.Items[Constants.HttpContextReqUserId]!;
 
-            byte[] image;
+            if (!asBase64)
+            {
+                byte[] imageBytes;
+
+                try
+                {
+                    imageBytes = await this._observationLocationService.GetStaticMapAsync(reqUserId, locationId);
+                }
+                catch (ArgumentException exc)
+                {
+                    return this.StatusCode(StatusCodes.Status400BadRequest, new OutboundErrorModel
+                    {
+                        Message = exc.Message
+                    });
+                }
+                return this.File(imageBytes, "image/png");
+            }
+
+            string imageBase64;
 
             try
             {
-                image = await this._observationLocationService.GetStaticMapAsync(reqUserId, locationId);
+                imageBase64 = await this._observationLocationService.GetStaticMapAsBase64Async(reqUserId, locationId);
             }
             catch (ArgumentException exc)
             {
@@ -174,7 +195,8 @@
                 });
             }
 
-            return this.File(image, "image/png");
+            return this.Ok(imageBase64);
+
         }
     }
 }

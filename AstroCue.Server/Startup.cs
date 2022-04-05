@@ -43,7 +43,7 @@ namespace AstroCue.Server
         /// <summary>
         /// Boolean value representing whether or not development services should be registered
         /// </summary>
-        private const bool RegisterDeveloperServices = false;
+        private const bool RegisterDeveloperServices = true;
 
         /// <summary>
         /// Instance of <see cref="IEnvironmentManager"/>

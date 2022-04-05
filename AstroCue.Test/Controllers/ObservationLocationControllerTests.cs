@@ -255,7 +255,7 @@
                 .ReturnsAsync(image);
 
             // Act
-            IActionResult res = this._sut.GetStaticMap(1).Result;
+            IActionResult res = this._sut.GetStaticMap(1, false).Result;
 
             // Assert
             res.Should().NotBeNull();
