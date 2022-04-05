@@ -44,5 +44,16 @@
         /// <exception cref="ArgumentException">If the user does not an <see cref="ObservationLocation"/> matching
         /// the given ID</exception>
         Task<byte[]> GetStaticMapAsync(int reqUserId, int locationId);
+
+        /// <summary>
+        /// Gets a static map for a specific <see cref="ObservationLocation"/> and returns the resulting
+        /// image as a base64 data URL
+        /// </summary>
+        /// <param name="reqUserId">The ID of the user that made the request</param>
+        /// <param name="locationId">The ID of the <see cref="ObservationLocation"/> that the map is being retrieved for</param>
+        /// <returns>A byte array representing the image data</returns>
+        /// <exception cref="ArgumentException">If the user does not an <see cref="ObservationLocation"/> matching
+        /// the given ID</exception>
+        Task<string> GetStaticMapAsBase64Async(int reqUserId, int locationId);
     }
 }
