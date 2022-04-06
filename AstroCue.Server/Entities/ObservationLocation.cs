@@ -56,6 +56,11 @@
         public List<Observation> Observations { get; set; }
 
         /// <summary>
+        /// Gets or sets a list of <see cref="Report"/>s that this location has had created for it
+        /// </summary>
+        public List<Report> Reports { get; set; }
+
+        /// <summary>
         /// Gets or sets the foreign key linked to a <see cref="Entities.AstroCueUser"/>
         /// </summary>
         public int AstroCueUserId { get; set; }
