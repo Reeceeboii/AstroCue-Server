@@ -113,11 +113,18 @@
         public OutboundObsLocationModel Delete(int reqUserId, int locationId)
         {
             ObservationLocation loc = this._context.ObservationLocations
+                .Include(o => o.Reports)
                 .SingleOrDefault(l => l.AstroCueUserId == reqUserId && l.Id == locationId);
 
             if (loc == null)
             {
                 throw new ArgumentException("Location does not exist on account");
+            }
+
+            if (loc.Reports.Any())
+            {
+                throw new ArgumentException(
+                    "You cannot delete an observation location with associated reports");
             }
 
             this._context.ObservationLocations.Attach(loc);
