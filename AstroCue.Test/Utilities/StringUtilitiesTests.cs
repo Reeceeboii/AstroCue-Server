@@ -19,20 +19,24 @@
             string emptyTest = string.Empty;
             const string test2 = "   test case 2 ";
             const string test3 = "Test 3";
+            const string test4 = "test 4 With subsequent Capitals";
 
             string emptyTestExpected = string.Empty;
             const string test2Expected = "Test case 2";
             const string test3Expected = "Test 3";
+            const string test4Expected = "Test 4 With subsequent Capitals";
 
             // Act
             string emptyTestResult = StringUtilities.TrimToUpperFirstChar(emptyTest);
             string test2Result = StringUtilities.TrimToUpperFirstChar(test2);
             string test3Result = StringUtilities.TrimToUpperFirstChar(test3);
+            string test4Result = StringUtilities.TrimToUpperFirstChar(test4);
 
             // Assert
             emptyTestResult.Should().Be(emptyTestExpected);
             test2Result.Should().Be(test2Expected);
             test3Result.Should().Be(test3Expected);
+            test4Result.Should().Be(test4Expected);
         }
 
         /// <summary>

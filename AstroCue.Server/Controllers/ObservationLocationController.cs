@@ -49,7 +49,7 @@
         /// <summary>
         /// Add a new observation location to a user's account
         /// </summary>
-        /// <param name="inboundObsLocationModel">An instance of <see cref="InboundObservationLocationModel"/></param>
+        /// <param name="inboundObsLocationModel">An instance of <see cref="InboundObsLocationModel"/></param>
         /// <returns>An instance of <see cref="OutboundObsLocationModel"/> if the request was successful, or if not,
         /// an instance of <see cref="OutboundErrorModel"/></returns>
         [HttpPost]
@@ -66,13 +66,76 @@
         {
             int reqUserId = (int)this.HttpContext.Items[Constants.HttpContextReqUserId]!;
 
-            OutboundObsLocationModel loc = this._observationLocationService.AddNew(reqUserId, inboundObsLocationModel); ;
+            OutboundObsLocationModel loc = null;
+
+            try
+            {
+                loc = this._observationLocationService.AddNew(reqUserId, inboundObsLocationModel);
+            }
+            catch (Exception exc)
+            {
+                return this.StatusCode(StatusCodes.Status400BadRequest, new OutboundErrorModel
+                {
+                    Message = exc.Message
+                });
+            }
 
             if (loc == null)
             {
                 return this.StatusCode(StatusCodes.Status500InternalServerError, new OutboundErrorModel
                 {
                     Message = "Failed to add location to your account, please try again"
+                });
+            }
+
+            return this.Ok(loc);
+        }
+
+        /// <summary>
+        /// Endpoint that allows existing observation locations to have their details edited
+        /// </summary>
+        /// <param name="inboundObsLocationModel">Instance of <see cref="InboundObsLocationModel"/></param>
+        /// <param name="idParameter">Instance of <see cref="IdParameter"/></param>
+        /// <returns>An instance of <see cref="OutboundObsLocationModel"/> if the request was successful, or if not,
+        /// an instance of <see cref="OutboundErrorModel"/></returns>
+        [HttpPatch]
+        [Route("edit")]
+        [SwaggerOperation(
+            Summary = "Edit an observation location",
+            Description = "Provide a set of updated observation details to update an existing location with")]
+        [SwaggerResponse(StatusCodes.Status200OK,
+            "The request completed successfully and the observation location has been updated",
+            typeof(OutboundObsLocationModel))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest,
+            "Check parameters", typeof(OutboundErrorModel))]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError,
+            "Internal server error", typeof(OutboundErrorModel))]
+        public IActionResult EditObservationLocation(
+            [FromBody, SwaggerParameter("Observation location", Required = true)]
+            InboundObsLocationModel inboundObsLocationModel,
+            [FromQuery, SwaggerParameter("ID of location to edit", Required = true)]
+            IdParameter idParameter)
+        {
+            int reqUserId = (int)this.HttpContext.Items[Constants.HttpContextReqUserId]!;
+
+            OutboundObsLocationModel loc = null;
+            try
+            {
+                loc = this._observationLocationService.Edit(reqUserId, idParameter.Id, inboundObsLocationModel);
+            }
+            catch (Exception exc)
+            {
+                return this.StatusCode(StatusCodes.Status400BadRequest, new OutboundErrorModel
+                {
+                    Message = exc.Message
+                });
+            }
+
+            if (loc == null)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, new OutboundErrorModel
+                {
+                    Message = "Failed to apply edits, please try again"
                 });
             }
 

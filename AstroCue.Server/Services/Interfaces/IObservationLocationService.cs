@@ -21,6 +21,15 @@
         OutboundObsLocationModel AddNew(int reqUserId, InboundObsLocationModel inboundModel);
 
         /// <summary>
+        /// Allows observation locations to be edited
+        /// </summary>
+        /// <param name="reqUserId">The ID of the user that made the request</param>
+        /// <param name="model">An instance of <see cref="InboundObsLocationModel"/></param>
+        /// <param name="locationId">The ID of the location to be edited</param>
+        /// <returns>An instance of <see cref="OutboundObsLocationModel"/></returns>
+        OutboundObsLocationModel Edit(int reqUserId, int locationId, InboundObsLocationModel model);
+
+        /// <summary>
         /// Delete an observation location from a user's account
         /// </summary>
         /// <param name="reqUserId">The ID of the user that made the request</param>
