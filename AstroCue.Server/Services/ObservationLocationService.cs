@@ -79,6 +79,12 @@
                 .Include(u => u.ObservationLocations)
                 .Single();
 
+            // altitude and azimuth coordinate system does not function at the poles, so explicitly dissalow them
+            if (inboundModel.Latitude is 90f or -90f)
+            {
+                throw new ArgumentException("Pole locations not allowed!");
+            }
+
             ObservationLocation loc = this._mapper.Map<ObservationLocation>(inboundModel);
 
             LightPollution pollution;
@@ -98,6 +104,60 @@
             loc.BortleDesc = pollution.BortleDesc;
 
             user.ObservationLocations.Add(loc);
+
+            return this._context.SaveChanges() == 1
+                ? this._mapper.Map<OutboundObsLocationModel>(loc)
+                : null;
+        }
+
+        /// <summary>
+        /// Allows observation locations to be edited
+        /// </summary>
+        /// <param name="reqUserId">The ID of the user that made the request</param>
+        /// <param name="model">An instance of <see cref="InboundObsLocationModel"/></param>
+        /// <param name="locationId">The ID of the location to be edited</param>
+        /// <returns>An instance of <see cref="OutboundObsLocationModel"/></returns>
+        public OutboundObsLocationModel Edit(int reqUserId, int locationId, InboundObsLocationModel model)
+        {
+            ObservationLocation loc = this._context.ObservationLocations
+                .SingleOrDefault(l => l.Id == locationId && l.AstroCueUserId == reqUserId);
+
+            if (loc == null)
+            {
+                throw new ArgumentException("That location does not exist on the account");
+            }
+
+            string newName = StringUtilities.TrimToUpperFirstChar(model.Name);
+
+            // floating point comparison -- no computation is done here so warnings can be ignored??
+            // ReSharper disable once CompareOfFloatsByEqualityOperator
+            if (loc.Name == newName && loc.Latitude == model.Latitude && loc.Longitude == model.Longitude)
+            {
+                throw new ArgumentException("Those details are indentical to the existing ones!");
+            }
+
+            // altitude and azimuth coordinate system does not function at the poles, so explicitly dissalow them
+            if (model.Latitude is 90f or -90f)
+            {
+                throw new ArgumentException("Pole locations not allowed!");
+            }
+
+            // update light pollution details for new location
+            LightPollution pollution;
+            try
+            {
+                pollution = this._lightPollutionService.GetLightPollutionForCoords(model.Longitude, model.Latitude);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+
+            loc.Name = newName;
+            loc.Latitude = model.Latitude;
+            loc.Longitude = model.Longitude;
+            loc.BortleDesc = pollution.BortleDesc;
+            loc.BortleScaleValue = pollution.BortleValue;
 
             return this._context.SaveChanges() == 1
                 ? this._mapper.Map<OutboundObsLocationModel>(loc)
