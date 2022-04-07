@@ -53,8 +53,8 @@
 
             // carry out capitalisation and trimming etc...
             newUser.EmailAddress = StringUtilities.TrimToLowerAll(newUser.EmailAddress);
-            newUser.FirstName = StringUtilities.TrimToUpperFirstChar(newUser.FirstName);
-            newUser.LastName = StringUtilities.TrimToUpperFirstChar(newUser.LastName);
+            newUser.FirstName = StringUtilities.TrimToUpperFirstChar(newUser.FirstName, true);
+            newUser.LastName = StringUtilities.TrimToUpperFirstChar(newUser.LastName, true);
 
             // check that email address isn't already registered with AstroCue
             if (this._context.AstroCueUsers.Any(existingUser => existingUser.EmailAddress == newUser.EmailAddress))

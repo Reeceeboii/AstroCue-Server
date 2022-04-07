@@ -125,7 +125,7 @@
             // Assert
             res.Should().NotBeNull();
             this._mockHttpMessageHandler.GetMatchCount(mockedRequest).Should().Be(1);
-            res.Description.Should().Be("overcast clouds");
+            res.Description.Should().Be("Overcast clouds");
             res.CloudCoveragePercent.Should().Be(92);
             res.RetrievedAt.Should().Be(DateTime.Now.ToString("s"));
         }
