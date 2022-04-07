@@ -179,7 +179,15 @@
                 .Where(o => o.ObservationLocation.AstroCueUserId == reqUserId)
                 .ToList();
 
-            return this._mapper.Map<IList<OutboundObservationModel>>(models);
+            // generate more information URLs for each observation
+            IList<OutboundObservationModel> outbound = this._mapper.Map<IList<OutboundObservationModel>>(models);
+            foreach (OutboundObservationModel obs in outbound)
+            {
+                obs.AstronomicalObject.MoreInformation = GenerateMoreInformationUrl(
+                    obs.AstronomicalObject.Type, obs.AstronomicalObject.CatalogueIdentifier);
+            }
+
+            return outbound;
         }
 
         /// <summary>
