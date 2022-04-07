@@ -9,6 +9,7 @@
     using Models.Misc;
     using Newtonsoft.Json.Linq;
     using RestSharp;
+    using Utilities;
 
     /// <summary>
     /// Class that handles interacting with the OpenWeatherMap API to retrieve weather forecasts
@@ -65,7 +66,7 @@
 
             return new SingleForecast
             {
-                Description = (string)jObject["weather"]![0]!["description"],
+                Description = StringUtilities.TrimToUpperFirstChar((string)jObject["weather"]![0]!["description"]),
                 CloudCoveragePercent = (int)jObject["clouds"]!["all"],
                 TemperatureCelcius = Convert.ToInt32((int)jObject["main"]!["temp"]),
                 RetrievedAt = DateTime.Now.ToString("s")
@@ -112,7 +113,7 @@
                 int humidityPercent = (int)hour["main"]["humidity"];
                 float windSpeedMetersPerSec = (float)hour["wind"]!["speed"];
                 float probabilityOfPrecipitation = (float)hour["pop"];
-                string description = (string)hour["weather"]![0]!["description"];
+                string description = StringUtilities.TrimToUpperFirstChar((string)hour["weather"]![0]!["description"]);
 
                 EqTimeRecord eq = new()
                 {

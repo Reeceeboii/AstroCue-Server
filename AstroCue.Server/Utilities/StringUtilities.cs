@@ -12,12 +12,18 @@
         /// </summary>
         /// <example>"   john       " becomes "John"</example>
         /// <param name="s">The string to be operated on</param>
+        /// <param name="lowercaseRemainder">An optional parameter to lowercase the remainer of the string rather than
+        /// leaving its characters in their original case</param>
         /// <returns>The string with char[0] uppercased and excess whitespace removed</returns>
-        public static string TrimToUpperFirstChar(string s)
+        public static string TrimToUpperFirstChar(string s, bool lowercaseRemainder = false)
         {
             try
             {
                 s = s.Trim();
+                if (lowercaseRemainder)
+                {
+                    s = s.ToLower();
+                }
                 return char.ToUpper(s[0]) + s[1..];
             }
             catch (IndexOutOfRangeException)
