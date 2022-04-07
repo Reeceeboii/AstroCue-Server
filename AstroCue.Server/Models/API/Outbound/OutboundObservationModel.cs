@@ -32,6 +32,6 @@
         /// Gets or sets the <see cref="Entities.AstronomicalObject"/> that this 
         /// observation is targeting
         /// </summary>
-        public OutboundAstronomialObjectModel AstronomicalObject { get; set; }
+        public OutboundAstronomicalObjectModel AstronomicalObject { get; set; }
     }
 }

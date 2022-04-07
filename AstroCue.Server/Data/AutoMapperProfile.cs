@@ -25,8 +25,8 @@
             this.CreateMap<ObservationLocation, OutboundObsLocationModel>();
 
             // observations
-            this.CreateMap<HipObject, OutboundAstronomialObjectModel>();
-            this.CreateMap<NgcObject, OutboundAstronomialObjectModel>();
+            this.CreateMap<HipObject, OutboundAstronomicalObjectModel>();
+            this.CreateMap<NgcObject, OutboundAstronomicalObjectModel>();
             this.CreateMap<Observation, OutboundObservationModel>();
 
             // email models

@@ -44,9 +44,9 @@
         /// </summary>
         /// <param name="searchParams">An instance of <see cref="AstronomicalObjectSearchParams"/></param>
         /// <param name="reqUserId">ID of the user that made the request</param>
-        /// <returns>A list of <see cref="OutboundAstronomialObjectModel"/> instances
+        /// <returns>A list of <see cref="OutboundAstronomicalObjectModel"/> instances
         /// that match the search queries</returns>
-        public IList<OutboundAstronomialObjectModel> ObjectSearch(AstronomicalObjectSearchParams searchParams, int reqUserId)
+        public IList<OutboundAstronomicalObjectModel> ObjectSearch(AstronomicalObjectSearchParams searchParams, int reqUserId)
         {
             ObservationLocation loc = new()
             {
@@ -86,10 +86,10 @@
             query = query.Take(searchParams.Limit);
             IList<AstronomicalObject> results = query.ToList();
 
-            IList<OutboundAstronomialObjectModel> outbounds =
-                this._mapper.Map<IList<OutboundAstronomialObjectModel>>(results);
+            IList<OutboundAstronomicalObjectModel> outbounds =
+                this._mapper.Map<IList<OutboundAstronomicalObjectModel>>(results);
 
-            foreach (OutboundAstronomialObjectModel model in outbounds)
+            foreach (OutboundAstronomicalObjectModel model in outbounds)
             {
                 // Generate a CDS Portal search link so more information about the object can be found
                 model.MoreInformation = GenerateMoreInformationUrl(searchParams.Type, model.CatalogueIdentifier);
