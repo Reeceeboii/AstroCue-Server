@@ -14,9 +14,9 @@
         /// </summary>
         /// <param name="searchParams">An instance of <see cref="AstronomicalObjectSearchParams"/></param>
         /// <param name="reqUserId">The ID of the user that made the request</param>
-        /// <returns>A list of <see cref="OutboundAstronomialObjectModel"/> instances
+        /// <returns>A list of <see cref="OutboundAstronomicalObjectModel"/> instances
         /// that match the search queries</returns>
-        IList<OutboundAstronomialObjectModel> ObjectSearch(AstronomicalObjectSearchParams searchParams, int reqUserId);
+        IList<OutboundAstronomicalObjectModel> ObjectSearch(AstronomicalObjectSearchParams searchParams, int reqUserId);
 
         /// <summary>
         /// Set up a new observation between a location and an astronomical object

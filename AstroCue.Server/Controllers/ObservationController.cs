@@ -38,7 +38,7 @@
         /// Endpoint for searching for astronomical objects
         /// </summary>
         /// <param name="searchParams">An instance of <see cref="AstronomicalObjectSearchParams"/></param>
-        /// <returns>A list of <see cref="OutboundAstronomialObjectModel"/>, or an instance of
+        /// <returns>A list of <see cref="OutboundAstronomicalObjectModel"/>, or an instance of
         /// <see cref="OutboundErrorModel"/> in the case of an error</returns>
         [HttpGet]
         [Route("object-search")]
@@ -47,7 +47,7 @@
             Description = "Search for astronomical objects using a mixture of queries and flags")]
         [SwaggerResponse(
             StatusCodes.Status200OK, 
-            "Search was successful", typeof(IList<OutboundAstronomialObjectModel>))]
+            "Search was successful", typeof(IList<OutboundAstronomicalObjectModel>))]
         [SwaggerResponse(
             StatusCodes.Status400BadRequest,
             "There was an issue with the query parameters", typeof(OutboundErrorModel))]
@@ -56,7 +56,7 @@
         {
             int reqUserId = (int)this.HttpContext.Items[Constants.HttpContextReqUserId]!;
 
-            IList<OutboundAstronomialObjectModel> objects;
+            IList<OutboundAstronomicalObjectModel> objects;
 
             try
             {

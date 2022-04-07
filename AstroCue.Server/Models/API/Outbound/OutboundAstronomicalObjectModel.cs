@@ -5,7 +5,7 @@
     /// <summary>
     /// Model class representing an astronomical object
     /// </summary>
-    public class OutboundAstronomialObjectModel
+    public class OutboundAstronomicalObjectModel
     {
         /// <summary>
         /// Gets or sets the ID for the astronomical object
