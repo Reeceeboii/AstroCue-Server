@@ -8,6 +8,7 @@
     using Controllers.Parameters;
     using Data;
     using Entities;
+    using Entities.Owned;
     using Interfaces;
     using Microsoft.EntityFrameworkCore;
     using Models.API.Outbound;
@@ -83,7 +84,10 @@
                 .Where(obj => EF.Functions.Like(obj.Name, searchTerm));
 
             // limit query and execute
-            query = query.Take(searchParams.Limit);
+            query = query
+                .Take(searchParams.Limit)
+                .OrderBy(r => r.Name);
+
             IList<AstronomicalObject> results = query.ToList();
 
             IList<OutboundAstronomicalObjectModel> outbounds =
@@ -98,20 +102,52 @@
                 if (loc.Id <= 0) continue;
 
                 // apply short visibility report
-                model.LocationVMagReport = new LocationMagnitudeModel();
+                model.LocationVisibilityModel = new LocationVisibilityModel();
+
+                /*
+                 * Track diurnal motion over the next 24 hrs to ascertain whether or not the object actually rises
+                 * above the observer's local horizon.
+                 * See https://www.astronomy.ohio-state.edu/pogge.1/Ast161/Unit2/Images/circumpolar_sm.gif for
+                 * a simple visualisation.
+                 *
+                 * We essentially want to apply a warning to any object whose altitude is never >0deg over the
+                 * next 24hrs' worth of motion
+                 */
+
+                // only ever going be n<10 objects so O(n) not really a concern here
+                AstronomicalObject tempObject = results.Single(r => r.Id == model.Id);
+                List<AltAz> diurnalMotion = new();
+
+                DateTime start = DateTime.Now.ToUniversalTime().AddHours(1);
+                for (DateTime instant = start; instant <= start.AddDays(1); instant = instant.AddHours(1))
+                {
+                    diurnalMotion.Add(CoordinateTransformations.EquatorialToHorizontal(
+                        tempObject,
+                        instant, 
+                        loc.Longitude,
+                        loc.Latitude));
+                }
+
+                bool rises = diurnalMotion.Any(coord => coord.Altitude > 0);
+
+                // and finally, apply the warnings to the result set
+                if (!rises)
+                {
+                    model.LocationVisibilityModel.HorizonAlert = true;
+                    model.LocationVisibilityModel.HorizonMessage = $"Object not visible over next 24hrs from {loc.Name}";
+                }
 
                 if (model.ApparentMagnitude > BortleScale.ScaleToNakedEyeLimitingMagnitude(loc.BortleScaleValue))
                 {
-                    model.LocationVMagReport.VisibilityAlert = true;
-                    model.LocationVMagReport.VisibilityMessage =
-                        $"This object is too dim to be seen with with the naked-eye from {loc.Name}, " +
-                        "however, you may still be able to see it with telescopes, binoculars, or long " +
-                        "exposure photography";
+                    model.LocationVisibilityModel.VisibilityAlert = true;
+                    model.LocationVisibilityModel.VisibilityMessage =
+                        $"Too dim for naked-eye observations from {loc.Name}, but " +
+                        "you may still observe it with telescopes or long exposure photography";
                 }
                 else
                 {
-                    model.LocationVMagReport.VisibilityAlert = false;
-                    model.LocationVMagReport.VisibilityMessage =
+                    model.LocationVisibilityModel.VisibilityAlert = false;
+                    model.LocationVisibilityModel.VisibilityMessage =
                         $"This object is bright enough to be seen from {loc.Name}!";
                 }
             }
