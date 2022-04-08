@@ -36,9 +36,9 @@
         public float ApparentMagnitude { get; set; }
 
         /// <summary>
-        /// Gets or sets an instance of <see cref="LocationMagnitudeModel"/>
+        /// Gets or sets an instance of <see cref="Misc.LocationVisibilityModel"/>
         /// </summary>
-        public LocationMagnitudeModel LocationVMagReport { get; set; }
+        public LocationVisibilityModel LocationVisibilityModel { get; set; }
 
         /// <summary>
         /// Gets or sets a link where users can discover more information about the object
