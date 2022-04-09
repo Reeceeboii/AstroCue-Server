@@ -27,6 +27,12 @@
         string MailGunApiKey { get; }
 
         /// <summary>
+        /// Gets a boolean regarding the registration of development services from
+        /// the environment
+        /// </summary>
+        bool RegisterDevServices { get; }
+
+        /// <summary>
         /// Gets the base messages URL for the MailGun API
         /// </summary>
         string BaseMailGunMessagesUrl { get; }

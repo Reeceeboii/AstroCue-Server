@@ -45,6 +45,8 @@
         /// </summary>
         public string MailGunApiKey => this._configuration["MailGun:APIKey"];
 
+        public bool RegisterDevServices => bool.Parse(this._configuration["Env:RegisterDevServices"]);
+
         #endregion // Environment Variables
 
         #region Base API URLs
