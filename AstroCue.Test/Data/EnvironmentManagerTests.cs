@@ -66,6 +66,21 @@
         private const string MailGunApiKeyValue = "mailgunkey";
 
         /// <summary>
+        /// Register developer services key index
+        /// </summary>
+        private const string RegisterDevServicesKeyIndex = "Env:RegisterDevServices";
+
+        /// <summary>
+        /// First value to test the registration of development services
+        /// </summary>
+        private const string RegisterDevServicesKeyValue1 = "false";
+
+        /// <summary>
+        /// Second value to test the registration of development services
+        /// </summary>
+        private const string RegisterDevServicesKeyValue2 = "true";
+
+        /// <summary>
         /// Base MailGun messages URL
         /// </summary>
         private const string BaseMailGunMessagesUrl = "https://api.eu.mailgun.net/v3";
@@ -96,6 +111,11 @@
             this._mockConfiguration
                 .Setup(i => i[It.Is<string>(s => s == MailGunApiKeyIndex)])
                 .Returns(MailGunApiKeyValue);
+
+            // register dev service key (both possibilites)
+            this._mockConfiguration.SetupSequence(i => i[It.Is<string>(s => s == RegisterDevServicesKeyIndex)])
+                .Returns(RegisterDevServicesKeyValue1)
+                .Returns(RegisterDevServicesKeyValue2);
         }
 
         /// <summary>
@@ -112,10 +132,14 @@
             this._sut.Should().NotBeNull();
 
             this._sut.JwtSecret.Should().Be(JsonWebTokenSecretValue);
+
             this._sut.MapBoxApiKey.Should().Be(MapBoxApiKeyValue);
             this._sut.MailGunApiKey.Should().Be(MailGunApiKeyValue);
             this._sut.OpenWeatherMapApiKey.Should().Be(OpenWeatherMapApiKeyValue);
             this._sut.BaseMailGunMessagesUrl.Should().Be(BaseMailGunMessagesUrl);
+
+            this._sut.RegisterDevServices.Should().Be(false);
+            this._sut.RegisterDevServices.Should().Be(true);
         }
 
         /// <summary>

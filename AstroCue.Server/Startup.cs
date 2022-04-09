@@ -41,11 +41,6 @@ namespace AstroCue.Server
         }
 
         /// <summary>
-        /// Boolean value representing whether or not development services should be registered
-        /// </summary>
-        private const bool RegisterDeveloperServices = true;
-
-        /// <summary>
         /// Instance of <see cref="IEnvironmentManager"/>
         /// </summary>
         private IEnvironmentManager _environmentManager;
@@ -158,7 +153,7 @@ namespace AstroCue.Server
             services.AddSingleton(mapperConfiguration.CreateMapper());
 
             // register development services
-            if (RegisterDeveloperServices)
+            if (this._environmentManager.RegisterDevServices)
             {
                 services.AddScoped<IEmailService, DevEmailService>();
             }
