@@ -278,6 +278,7 @@
                             ObservationLocation = entry.Key,
                             AstroCueUser = user,
                             AstronomicalObjectName = obs.AstronomicalObject.Name,
+                            AstronomicalObjectReportIsTargeting = obs.AstronomicalObject.Id,
                             BestTimeToObserveUtc = timeOfBest,
                             HorizontalCoordinates = apparentHorizontalPosition,
                             WeatherForecast = new WeatherForecast()

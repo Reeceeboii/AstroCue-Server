@@ -69,5 +69,10 @@
         /// Gets or sets a <see cref="DbSet{TEntity}"/> of <see cref="Report"/> entities
         /// </summary>
         public DbSet<Report> Reports { get; set; }
+
+        /// <summary>
+        /// Gets or sets a <see cref="DbSet{TEntity}"/> of <see cref="ObservationLog"/> entities
+        /// </summary>
+        public DbSet<ObservationLog> ObservationLogs { get; set; }
     }
 }

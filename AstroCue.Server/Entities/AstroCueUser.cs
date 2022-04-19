@@ -43,6 +43,11 @@
         public List<Report> Reports { get; set; }
 
         /// <summary>
+        /// Gets or sets a list of observation logs that the user has created
+        /// </summary>
+        public List<ObservationLog> ObservationLogs { get; set; }
+
+        /// <summary>
         /// Gets or sets the user's password hash as an array of bytes
         /// </summary>
         [Required]
