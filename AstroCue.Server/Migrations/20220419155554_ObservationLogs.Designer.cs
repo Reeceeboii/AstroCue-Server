@@ -4,14 +4,16 @@ using AstroCue.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AstroCue.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220419155554_ObservationLogs")]
+    partial class ObservationLogs
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -158,9 +160,6 @@ namespace AstroCue.Server.Migrations
 
                     b.Property<DateTime>("DateTaken")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("LogForReportId")
-                        .HasColumnType("int");
 
                     b.Property<float>("ObservationLocationLatitude")
                         .HasColumnType("real");

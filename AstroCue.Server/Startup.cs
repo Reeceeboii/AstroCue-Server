@@ -2,6 +2,7 @@ namespace AstroCue.Server
 {
     using System;
     using System.IO.Abstractions;
+    using System.IO.Compression;
     using System.Text;
     using System.Threading.Tasks;
     using AutoMapper;
@@ -13,6 +14,7 @@ namespace AstroCue.Server
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.ResponseCompression;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -137,6 +139,17 @@ namespace AstroCue.Server
                 };
             });
 
+            services.AddResponseCompression(opt =>
+            {
+                opt.EnableForHttps = true;
+                opt.Providers.Add<GzipCompressionProvider>();
+            });
+
+            services.Configure<GzipCompressionProviderOptions>(opt =>
+            {
+                opt.Level = CompressionLevel.Optimal;
+            });
+
             services.AddSingleton(this.Configuration);
             this._environmentManager = new EnvironmentManager(this.Configuration);
             services.AddSingleton(this._environmentManager);
@@ -171,6 +184,7 @@ namespace AstroCue.Server
             services.AddScoped<IObservationLocationService, ObservationLocationService>();
             services.AddScoped<IObservationService, ObservationService>();
             services.AddScoped<IReportService, ReportService>();
+            services.AddScoped<IObservationLogService, ObservationLogService>();
         }
 
         /// <summary>
@@ -184,6 +198,8 @@ namespace AstroCue.Server
             IBackgroundJobClient backgroundJobs,
             IWebHostEnvironment env)
         {
+            app.UseResponseCompression();
+
             if (env.IsDevelopment())
             {
                 app.UseCors(cors =>
