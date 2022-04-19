@@ -1,5 +1,6 @@
 ﻿namespace AstroCue.Server.Services.Interfaces
 {
+    using System.Collections.Generic;
     using Models.API.Inbound;
     using Models.API.Outbound;
 
@@ -17,5 +18,13 @@
         OutboundObservationLogModel NewObservationLog(
             int reqUserId, 
             InboundObservationLogModel model);
+
+        /// <summary>
+        /// Retrieve all of the logs that belong to a given user, ordered by the date
+        /// they were created
+        /// </summary>
+        /// <param name="reqUserId">The ID of the user that made the request</param>
+        /// <returns>A list of <see cref="OutboundObservationLogModel"/> instances</returns>
+        IList<OutboundObservationLogModel> GetAll(int reqUserId);
     }
 }

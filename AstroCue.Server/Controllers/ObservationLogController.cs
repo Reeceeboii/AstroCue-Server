@@ -1,6 +1,7 @@
 ﻿namespace AstroCue.Server.Controllers
 {
     using System;
+    using System.Collections.Generic;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
@@ -32,6 +33,12 @@
             this._observationLogService = observationLogService;
         }
 
+        /// <summary>
+        /// Endpoint that allows users to create new observation logs against reports
+        /// that astrocue has created for them
+        /// </summary>
+        /// <param name="model">An instance of <see cref="InboundObservationLogModel"/></param>
+        /// <returns><see cref="IActionResult"/></returns>
         [HttpPost]
         [Route("new")]
         [SwaggerOperation(
@@ -74,6 +81,28 @@
             }
 
             return this.Ok(log);
+        }
+
+
+        /// <summary>
+        /// Endpoint that allows users to retrieve all of the reports they have created
+        /// </summary>
+        /// <returns><see cref="IActionResult"/></returns>
+        [HttpGet]
+        [Route("all")]
+        [SwaggerOperation(
+            Summary = "Get all logs",
+            Description = "Retrieve all of the observation logs that are linked to an account")]
+        [SwaggerResponse(
+            StatusCodes.Status200OK, "The request completed successfully", typeof(IList<OutboundObservationLogModel>))]
+        [SwaggerResponse(
+            StatusCodes.Status400BadRequest,
+            "Something went wrong, check the request parameters",
+            typeof(OutboundErrorModel))]
+        public IActionResult GetAll()
+        {
+            int reqUserId = (int)this.HttpContext.Items[Constants.HttpContextReqUserId]!;
+            return this.Ok(this._observationLogService.GetAll(reqUserId));
         }
     }
 }

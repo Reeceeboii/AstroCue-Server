@@ -1,6 +1,7 @@
 ﻿namespace AstroCue.Server.Services
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using AutoMapper;
     using Data;
@@ -95,6 +96,22 @@
             return this._context.SaveChanges() == 1
                 ? this._mapper.Map<OutboundObservationLogModel>(log)
                 : null;
+        }
+
+        /// <summary>
+        /// Retrieve all of the logs that belong to a given user, ordered by the date
+        /// they were created
+        /// </summary>
+        /// <param name="reqUserId">The ID of the user that made the request</param>
+        /// <returns>A list of <see cref="OutboundObservationLogModel"/> instances</returns>
+        public IList<OutboundObservationLogModel> GetAll(int reqUserId)
+        {
+            AstroCueUser user = this._context.AstroCueUsers
+                .Include(u => u.ObservationLogs
+                    .OrderByDescending(l => l.DateTaken))
+                .Single(u => u.Id == reqUserId);
+
+            return this._mapper.Map<IList<OutboundObservationLogModel>>(user.ObservationLogs);
         }
     }
 }
