@@ -92,7 +92,7 @@
         [HttpDelete]
         [Route("delete")]
         [SwaggerOperation(
-            Summary = "Delete an observation",
+            Summary = "Delete an report",
             Description = "Delete an observation from an account by providing its ID")]
         [SwaggerResponse(StatusCodes.Status200OK, "Request successful", typeof(OutboundReportModel))]
         [SwaggerResponse(StatusCodes.Status400BadRequest, "Check parameters", typeof(OutboundErrorModel))]

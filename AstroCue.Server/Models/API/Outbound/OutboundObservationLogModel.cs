@@ -9,6 +9,11 @@
     public class OutboundObservationLogModel
     {
         /// <summary>
+        /// Gets or sets the ID of the observation log
+        /// </summary>
+        public int Id { get; set; }
+
+        /// <summary>
         /// Gets or sets a textual description of what was observed
         /// </summary>
         public string TextualDescription { get; set; }

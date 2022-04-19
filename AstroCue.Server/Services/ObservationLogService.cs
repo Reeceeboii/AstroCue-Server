@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using AutoMapper;
+    using Controllers.Parameters;
     using Data;
     using Entities;
     using Interfaces;
@@ -43,6 +44,8 @@
         /// <param name="reqUserId">The ID of the user who made the request</param>
         /// <param name="model">An instance of <see cref="InboundObservationLogModel"/></param>
         /// <returns>An instance of <see cref="OutboundObservationLogModel"/></returns>
+        /// <exception cref="Exception">If the report trying to be logged against
+        /// does not exist on the account</exception>
         public OutboundObservationLogModel NewObservationLog(
             int reqUserId, 
             InboundObservationLogModel model)
@@ -112,6 +115,34 @@
                 .Single(u => u.Id == reqUserId);
 
             return this._mapper.Map<IList<OutboundObservationLogModel>>(user.ObservationLogs);
+        }
+
+        /// <summary>
+        /// Deletes a single log from a user's account
+        /// </summary>
+        /// <param name="reqUserId">The ID of the user that made the request</param>
+        /// <param name="idParam">An instance of <see cref="IdParameter"/></param>
+        /// <returns>An instance of <see cref="OutboundObservationLogModel"/></returns>
+        /// <exception cref="Exception">If the log does not exist on the account</exception>
+        public OutboundObservationLogModel Delete(int reqUserId, IdParameter idParam)
+        {
+            AstroCueUser user = this._context.AstroCueUsers
+                .Include(u => u.ObservationLogs)
+                .Single(u => u.Id == reqUserId);
+
+            ObservationLog log = user.ObservationLogs.SingleOrDefault(l => l.Id == idParam.Id);
+
+            if (log == null)
+            {
+                throw new Exception("Log does not exist on account");
+            }
+
+            this._context.Attach(log);
+            this._context.Remove(log);
+
+            return this._context.SaveChanges() == 1
+                ? this._mapper.Map<OutboundObservationLogModel>(log)
+                : null;
         }
     }
 }

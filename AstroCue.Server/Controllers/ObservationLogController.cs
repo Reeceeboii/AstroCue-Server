@@ -7,6 +7,7 @@
     using Microsoft.AspNetCore.Mvc;
     using Models.API.Inbound;
     using Models.API.Outbound;
+    using Parameters;
     using Services.Interfaces;
     using Swashbuckle.AspNetCore.Annotations;
     using Utilities;
@@ -104,5 +105,54 @@
             int reqUserId = (int)this.HttpContext.Items[Constants.HttpContextReqUserId]!;
             return this.Ok(this._observationLogService.GetAll(reqUserId));
         }
+
+        [HttpDelete]
+        [Route("delete")]
+        [SwaggerOperation(
+            Summary = "Delete an observation log",
+            Description = "Remove an observation log from an account by providing its ID")]
+        [SwaggerResponse(
+            StatusCodes.Status200OK, 
+            "The request completed successfully",
+            typeof(OutboundObservationLogModel))]
+        [SwaggerResponse(
+            StatusCodes.Status400BadRequest, 
+            "Something went wrong, check the request parameters",
+            typeof(OutboundErrorModel))]
+        [SwaggerResponse(
+            StatusCodes.Status500InternalServerError,
+            "Internal server error",
+            typeof(OutboundErrorModel))]
+        public IActionResult DeleteObservationLog(
+            [FromQuery, SwaggerParameter("ID of location to edit", Required = true)]
+            IdParameter idParameter)
+        {
+            int reqUserId = (int)this.HttpContext.Items[Constants.HttpContextReqUserId]!;
+
+            OutboundObservationLogModel log;
+
+            try
+            {
+                log = this._observationLogService.Delete(reqUserId, idParameter);
+            }
+            catch (Exception exc)
+            {
+                return this.StatusCode(StatusCodes.Status400BadRequest, new OutboundErrorModel()
+                {
+                    Message = exc.Message
+                });
+            }
+
+            if (log == null)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, new OutboundErrorModel()
+                {
+                    Message = "Internal server error"
+                });
+            }
+
+            return this.Ok(log);
+        }
+
     }
 }
