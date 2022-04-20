@@ -45,6 +45,9 @@
         /// </summary>
         public string MailGunApiKey => this._configuration["MailGun:APIKey"];
 
+        /// <summary>
+        /// Gets the register dev services flag from the environment and parses it as a bool
+        /// </summary>
         public bool RegisterDevServices => bool.Parse(this._configuration["Env:RegisterDevServices"]);
 
         #endregion // Environment Variables

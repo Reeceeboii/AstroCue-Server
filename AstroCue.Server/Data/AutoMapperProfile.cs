@@ -29,6 +29,9 @@
             this.CreateMap<NgcObject, OutboundAstronomicalObjectModel>();
             this.CreateMap<Observation, OutboundObservationModel>();
 
+            // observation logs
+            this.CreateMap<ObservationLog, OutboundObservationLogModel>();
+
             // email models
             this.CreateMap<AstroCueUser, WelcomeEmailModel>();
 

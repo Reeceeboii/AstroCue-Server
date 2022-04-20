@@ -26,6 +26,13 @@
         public string AstronomicalObjectName { get; set; }
 
         /// <summary>
+        /// Gets or sets the ID of the astronomical object
+        /// that the report is targeting
+        /// </summary>
+        [Required]
+        public int AstronomicalObjectReportIsTargeting { get; set; }
+
+        /// <summary>
         /// Gets or sets the best time to observe that was calculated (in UTC)
         /// </summary>
         [Required]
