@@ -67,7 +67,7 @@
             }
             catch (Exception exc)
             {
-                return this.StatusCode(StatusCodes.Status400BadRequest, new OutboundErrorModel()
+                return this.StatusCode(StatusCodes.Status400BadRequest, new OutboundErrorModel
                 {
                     Message = exc.Message
                 });
@@ -75,7 +75,7 @@
 
             if (log == null)
             {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, new OutboundErrorModel()
+                return this.StatusCode(StatusCodes.Status500InternalServerError, new OutboundErrorModel
                 {
                     Message = "Internal server error"
                 });
@@ -83,7 +83,6 @@
 
             return this.Ok(log);
         }
-
 
         /// <summary>
         /// Endpoint that allows users to retrieve all of the reports they have created
@@ -124,7 +123,7 @@
             "Internal server error",
             typeof(OutboundErrorModel))]
         public IActionResult DeleteObservationLog(
-            [FromQuery, SwaggerParameter("ID of location to edit", Required = true)]
+            [FromQuery, SwaggerParameter("ID of observation log to delete", Required = true)]
             IdParameter idParameter)
         {
             int reqUserId = (int)this.HttpContext.Items[Constants.HttpContextReqUserId]!;
@@ -137,7 +136,7 @@
             }
             catch (Exception exc)
             {
-                return this.StatusCode(StatusCodes.Status400BadRequest, new OutboundErrorModel()
+                return this.StatusCode(StatusCodes.Status400BadRequest, new OutboundErrorModel
                 {
                     Message = exc.Message
                 });
@@ -145,7 +144,7 @@
 
             if (log == null)
             {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, new OutboundErrorModel()
+                return this.StatusCode(StatusCodes.Status500InternalServerError, new OutboundErrorModel
                 {
                     Message = "Internal server error"
                 });
@@ -154,5 +153,55 @@
             return this.Ok(log);
         }
 
+        /// <summary>
+        /// Endpoint that allows users to edit an existing observation log on their account
+        /// </summary>
+        /// <param name="model">An instance of <see cref="InboundObservationLogEditModel"/></param>
+        /// <returns><see cref="IActionResult"/></returns>
+        [HttpPatch]
+        [Route("edit")]
+        [SwaggerOperation(
+            Summary = "Edit an observation log",
+            Description = "Provide a target ID and a new set of details to edit an observation log")]
+        [SwaggerResponse(
+            StatusCodes.Status200OK,
+            "The request completed successfully",
+            typeof(OutboundObservationLogModel))]
+        [SwaggerResponse(
+            StatusCodes.Status400BadRequest,
+            "Something went wrong, check the request parameters",
+            typeof(OutboundErrorModel))]
+        [SwaggerResponse(
+            StatusCodes.Status500InternalServerError,
+            "Internal server error",
+            typeof(OutboundErrorModel))]
+        public IActionResult EditObservationLog([FromBody] InboundObservationLogEditModel model)
+        {
+            int reqUserId = (int)this.HttpContext.Items[Constants.HttpContextReqUserId]!;
+
+            OutboundObservationLogModel log;
+
+            try
+            {
+                log = this._observationLogService.Edit(reqUserId, model);
+            }
+            catch (Exception exc)
+            {
+                return this.StatusCode(StatusCodes.Status400BadRequest, new OutboundErrorModel
+                {
+                    Message = exc.Message
+                });
+            }
+
+            if (log == null)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, new OutboundErrorModel
+                {
+                    Message = "Internal server error"
+                });
+            }
+
+            return this.Ok(log);
+        }
     }
 }

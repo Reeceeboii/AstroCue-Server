@@ -5,6 +5,7 @@
     using System.Linq;
     using AutoMapper;
     using Controllers.Parameters;
+    using Controllers.Parameters.Enums;
     using Data;
     using Entities;
     using Interfaces;
@@ -46,9 +47,7 @@
         /// <returns>An instance of <see cref="OutboundObservationLogModel"/></returns>
         /// <exception cref="Exception">If the report trying to be logged against
         /// does not exist on the account</exception>
-        public OutboundObservationLogModel NewObservationLog(
-            int reqUserId, 
-            InboundObservationLogModel model)
+        public OutboundObservationLogModel NewObservationLog(int reqUserId, InboundObservationLogModel model)
         {
             AstroCueUser user = this._context.AstroCueUsers
                 .Include(u => u.ObservationLogs)
@@ -72,7 +71,7 @@
             ObservationLog log = new()
             {
                 TextualDescription = model.TextualDescription.Trim(),
-                Observer = string.IsNullOrWhiteSpace(model.Observer) ? null : model.Observer,
+                Observer = string.IsNullOrWhiteSpace(model.Observer) ? null : model.Observer.Trim(),
 
                 WeatherForecast = report.WeatherForecast,
                 ObservationLocationName = report.ObservationLocation.Name,
@@ -83,12 +82,7 @@
                 CalculatedBestTimeToObserveUtc = report.BestTimeToObserveUtc,
                 HorizontalCoordinates = report.HorizontalCoordinates,
 
-                TypeOfObservation = model.ObservationType switch
-                {
-                    "NakedEye" => "Naked eye",
-                    "LongExposure" => "Long exposure photography",
-                    _ => model.ObservationType
-                },
+                TypeOfObservation = ObservationTypeParse(model.ObservationType),
 
                 DateTaken = DateTime.Now.ToUniversalTime(),
                 LogForReportId = model.ReportId
@@ -143,6 +137,65 @@
             return this._context.SaveChanges() == 1
                 ? this._mapper.Map<OutboundObservationLogModel>(log)
                 : null;
+        }
+
+        /// <summary>
+        /// Edits a log's details to match those of a new <see cref="InboundObservationLogEditModel"/> instance
+        /// </summary>
+        /// <param name="reqUserId">The ID of the user that made the request</param>
+        /// <param name="model">An instance of <see cref="InboundObservationLogEditModel"/></param>
+        /// <returns>An instance of <see cref="OutboundObservationLogModel"/></returns>
+        /// <exception cref="Exception">If the log does not exist on the account or the edit
+        /// attempts to apply the exact same properties that already exist in the database</exception>
+        public OutboundObservationLogModel Edit(int reqUserId, InboundObservationLogEditModel model)
+        {
+            AstroCueUser user = this._context.AstroCueUsers
+                .Include(u => u.ObservationLogs)
+                .Single(u => u.Id == reqUserId);
+
+            ObservationLog target = user.ObservationLogs.SingleOrDefault(l => l.Id == model.Id);
+
+            if (target == null)
+            {
+                throw new Exception("That log does not exist on this account");
+            }
+
+            // carry out some processing and cleaning of the incoming data
+            model.ObservationType = ObservationTypeParse(model.ObservationType);
+            model.Observer = string.IsNullOrWhiteSpace(model.Observer) ? null : model.Observer.Trim();
+            model.TextualDescription = model.TextualDescription.Trim();
+
+            // if the data is identical, throw an error
+            if (target.TextualDescription == model.TextualDescription
+                && target.Observer == model.Observer
+                && target.TypeOfObservation == model.ObservationType)
+            {
+                throw new Exception("Edit is identical to existing data");
+            }
+
+            target.TextualDescription = model.TextualDescription;
+            target.Observer = model.Observer;
+            target.TypeOfObservation = model.ObservationType;
+
+            return this._context.SaveChanges() == 1
+                ? this._mapper.Map<OutboundObservationLogModel>(target)
+                : null;
+        }
+
+        /// <summary>
+        /// Parses an instance of a string version of an <see cref="ObservationTypeEnum"/> into a string
+        /// suitable for storing in the database and subsequently returning to a user and displaying
+        /// </summary>
+        /// <param name="observationType">A string representing an element of <see cref="ObservationTypeEnum"/></param>
+        /// <returns>A pretty string representing <paramref name="observationType"/></returns>
+        private static string ObservationTypeParse(string observationType)
+        {
+            return observationType switch
+            {
+                "NakedEye" => "Naked eye",
+                "LongExposure" => "Long exposure photography",
+                _ => observationType
+            };
         }
     }
 }
