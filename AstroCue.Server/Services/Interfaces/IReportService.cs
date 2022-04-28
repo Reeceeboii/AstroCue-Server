@@ -1,5 +1,6 @@
 ﻿namespace AstroCue.Server.Services.Interfaces
 {
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Models.API.Outbound;
@@ -24,8 +25,9 @@
         /// Retrieve all of the reports that belong to a given user
         /// </summary>
         /// <param name="reqUserId">The ID of the user that made the request</param>
-        /// <returns>A list of <see cref="OutboundReportModel"/> instances</returns>
-        IList<OutboundReportModel> GetReports(int reqUserId);
+        /// <returns>A list of <see cref="OutboundReportModel"/> instances grouped by the observation location
+        /// in which they were generated for</returns>
+        IList<OutboundObsLocReportModel> GetReports(int reqUserId);
 
         /// <summary>
         /// Delete a report by ID

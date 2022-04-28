@@ -84,12 +84,12 @@
         public string TypeOfObservation { get; set; }
 
         /// <summary>
-        /// Gets or sets the date that the observation log was taken.
+        /// Gets or sets the date that the observation log was edited.
         /// This is set by the server itself and is used to order logs by time when they are
         /// retrieved
         /// </summary>
         [Required]
-        public DateTime DateTaken { get; set; }
+        public DateTime DateLastEditedUtc { get; set; }
 
         /// <summary>
         /// Gets or sets the ID of the report that this log was taken for.

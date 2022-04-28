@@ -23,6 +23,7 @@
             // observation locations
             this.CreateMap<InboundObsLocationModel, ObservationLocation>();
             this.CreateMap<ObservationLocation, OutboundObsLocationModel>();
+            this.CreateMap<ObservationLocation, OutboundObsLocReportModel>();
 
             // observations
             this.CreateMap<HipObject, OutboundAstronomicalObjectModel>();

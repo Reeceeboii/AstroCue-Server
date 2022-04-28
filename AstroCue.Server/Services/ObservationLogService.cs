@@ -84,7 +84,7 @@
 
                 TypeOfObservation = ObservationTypeParse(model.ObservationType),
 
-                DateTaken = DateTime.Now.ToUniversalTime(),
+                DateLastEditedUtc = DateTime.UtcNow,
                 LogForReportId = model.ReportId
             };
 
@@ -105,7 +105,7 @@
         {
             AstroCueUser user = this._context.AstroCueUsers
                 .Include(u => u.ObservationLogs
-                    .OrderByDescending(l => l.DateTaken))
+                    .OrderByDescending(l => l.DateLastEditedUtc))
                 .Single(u => u.Id == reqUserId);
 
             return this._mapper.Map<IList<OutboundObservationLogModel>>(user.ObservationLogs);
@@ -176,6 +176,7 @@
             target.TextualDescription = model.TextualDescription;
             target.Observer = model.Observer;
             target.TypeOfObservation = model.ObservationType;
+            target.DateLastEditedUtc = DateTime.UtcNow;
 
             return this._context.SaveChanges() == 1
                 ? this._mapper.Map<OutboundObservationLogModel>(target)

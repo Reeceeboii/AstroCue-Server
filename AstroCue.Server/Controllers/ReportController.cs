@@ -23,7 +23,7 @@
         /// <summary>
         /// Instance of <see cref="IReportService"/>
         /// </summary>
-        private readonly IReportService reportService;
+        private readonly IReportService _reportService;
 
         /// <summary>
         /// Initialises a new instance of the <see cref="ReportController"/> class
@@ -31,23 +31,23 @@
         /// <param name="reportService">Instance of <see cref="IReportService"/></param>
         public ReportController(IReportService reportService)
         {
-            this.reportService = reportService;
+            this._reportService = reportService;
         }
 
         /// <summary>
         /// Retrieve all of the reports for a given user
         /// </summary>
-        /// <returns>A list of <see cref="OutboundReportModel"/> instances</returns>
+        /// <returns>A list of <see cref="OutboundObsLocReportModel"/> instances</returns>
         [HttpGet]
         [Route("all")]
         [SwaggerOperation(
             Summary = "Retrieve all reports",
             Description = "Retrieve all reports for a given user")]
-        [SwaggerResponse(StatusCodes.Status200OK, "Request successful", typeof(IList<OutboundReportModel>))]
+        [SwaggerResponse(StatusCodes.Status200OK, "Request successful", typeof(IList<OutboundObsLocReportModel>))]
         public IActionResult GetAllReports()
         {
             int reqUserId = (int)this.HttpContext.Items[Constants.HttpContextReqUserId]!;
-            return this.Ok(this.reportService.GetReports(reqUserId));
+            return this.Ok(this._reportService.GetReports(reqUserId));
         }
 
         /// <summary>
@@ -68,7 +68,7 @@
 
             try
             {
-                await this.reportService.GenerateReports(reqUserId);
+                await this._reportService.GenerateReports(reqUserId);
             }
             catch (Exception exc)
             {
@@ -107,7 +107,7 @@
 
             try
             {
-                report = this.reportService.DeleteReport(reqUserId, idParameter.Id);
+                report = this._reportService.DeleteReport(reqUserId, idParameter.Id);
             }
             catch (Exception exc)
             {
