@@ -14,11 +14,6 @@
         public int Id { get; set; }
 
         /// <summary>
-        /// Gets or sets the <see cref="Entities.ObservationLocation"/> navigation property
-        /// </summary>
-        public OutboundObsLocationModel ObservationLocation { get; set; }
-
-        /// <summary>
         /// Gets or sets the name of the astronomical object that was observed
         /// </summary>
         public string AstronomicalObjectName { get; set; }

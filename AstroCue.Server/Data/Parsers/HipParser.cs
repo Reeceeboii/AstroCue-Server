@@ -11,7 +11,7 @@
         /// <summary>
         /// Initialises a new instance of the <see cref="HipParser"/> class
         /// </summary>
-        /// <param name="fs"></param>
+        /// <param name="fs">An instance of <see cref="IFileSystem"/></param>
         public HipParser(IFileSystem fs)
             : base(fs, "I239_hip_main.tsv", "I239_hip_main_names.tsv") { }
 

@@ -134,7 +134,7 @@
             req.AddParameter("to", user.EmailAddress);
             req.AddParameter("subject", totalReports > 1 
                 ? $"Hi {user.FirstName}, your {totalReports} reports are here!" 
-                : $"Hi {user.FirstName}, report is here!");
+                : $"Hi {user.FirstName}, your report is here!");
             req.AddParameter("template", ReportEmailTemplate);
             req.AddParameter("h:X-Mailgun-Variables", templateData);
 

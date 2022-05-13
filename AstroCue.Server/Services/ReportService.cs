@@ -179,7 +179,7 @@
                     for (DateTime i = timeOfReportGenUtc; i <= endOfWindow; i = i.AddHours(1))
                     {
                         // if iterated hour does not fall into nighttime
-                        if (!(i > astronomicalSunset || i < astronomicalSunrise))
+                        if (!(i.Hour > astronomicalSunset.Hour || i.Hour < astronomicalSunrise.Hour))
                         {
                             continue;
                         }
@@ -319,16 +319,25 @@
         /// Retrieve all of the reports that belong to a given user
         /// </summary>
         /// <param name="reqUserId">The ID of the user that made the request</param>
-        /// <returns>A list of <see cref="OutboundReportModel"/> instances</returns>
-        public IList<OutboundReportModel> GetReports(int reqUserId)
+        /// <returns>A list of <see cref="OutboundReportModel"/> instances grouped by the observation location
+        /// in which they were generated for</returns>
+        public IList<OutboundObsLocReportModel> GetReports(int reqUserId)
         {
             AstroCueUser user = this._context.AstroCueUsers
+                .Include(u => u.ObservationLocations)
                 .Include(u => u.Reports
                     .OrderByDescending(r => r.BestTimeToObserveUtc))
                 .ThenInclude(r => r.ObservationLocation)
                 .Single(u => u.Id == reqUserId);
 
-            return this._mapper.Map<IList<OutboundReportModel>>(user.Reports);
+            IList<OutboundObsLocReportModel> outbound = new List<OutboundObsLocReportModel>();
+
+            foreach (ObservationLocation loc in user.ObservationLocations)
+            {
+                outbound.Add(this._mapper.Map<OutboundObsLocReportModel>(loc));
+            }
+
+            return outbound;
         }
 
         /// <summary>

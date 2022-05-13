@@ -72,6 +72,7 @@
             Band band = this._worldAtlasDataset.GetRasterBand(1);
 
             // calculate pixel offsets
+            // adapted from https://gis.stackexchange.com/questions/245472/convert-latitude-longitude-pair-to-pixels-in-geotiff
             int xOffset = (int)((longitude - this._geoTransformMatrix[0]) / this._geoTransformMatrix[1]);
             int yOffset = (int)((latitude - this._geoTransformMatrix[3]) / this._geoTransformMatrix[5]);
 

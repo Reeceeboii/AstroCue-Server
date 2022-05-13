@@ -64,6 +64,7 @@ namespace AstroCue.Server
         public void ConfigureServices(IServiceCollection services)
         {
             // Register database context with SQL Server
+            // (this line was borrowed from my IN3046: Cloud Computing coursework)
             services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.UseSqlServer(this.Configuration.GetConnectionString("SQLServer"));
@@ -200,15 +201,15 @@ namespace AstroCue.Server
         {
             app.UseResponseCompression();
 
+            app.UseCors(cors =>
+            {
+                cors.AllowAnyOrigin();
+                cors.AllowAnyMethod();
+                cors.AllowAnyHeader();
+            });
+
             if (env.IsDevelopment())
             {
-                app.UseCors(cors =>
-                {
-                    cors.AllowAnyOrigin();
-                    cors.AllowAnyMethod();
-                    cors.AllowAnyHeader();
-                });
-
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "AstroCue Server"));
@@ -234,8 +235,7 @@ namespace AstroCue.Server
                 });
             }
 
-            //RecurringJob.AddOrUpdate<IReportService>(s => s.GenerateReports(), Cron.Minutely);
-            //backgroundJobs.Enqueue<IReportService>(s => s.GenerateReports());
+            RecurringJob.AddOrUpdate<IReportService>(s => s.GenerateReports(default), "0 16 * * 1,4");
 
             app.UseEndpoints(endpoints =>
             {

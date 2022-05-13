@@ -49,7 +49,7 @@
             const float latitude = 38.92139f;
 
             const float venusExpectedAltitude = 15.1249f;
-            const float venusExpectedAzimuith = 68.0337f + 180; // North v South Azimuthal reckoning
+            const float venusExpectedAzimuth = 68.0337f + 180; // North v South Azimuthal reckoning
 
             // author's own test cases, expected values given from Stellarium software
             // ----------
@@ -74,7 +74,7 @@
             DateTime instant2 = DateTime.Parse("20 November 2026, 4:09 am").AsUtc();
 
             const float betelgeuseExpectedAltitude = 38.72908f;
-            const float betelgeuseExpectedAzimuith = 222.3626f;
+            const float betelgeuseExpectedAzimuth = 222.3626f;
 
             // Act
             AltAz venusPosition = CoordinateTransformations.EquatorialToHorizontal(venus, instant, longitude, latitude);
@@ -82,12 +82,12 @@
 
             // Assert
             venusPosition.Altitude.Should().BeInRange(venusExpectedAltitude - 10, venusExpectedAltitude + 10);
-            venusPosition.Azimuth.Should().BeInRange(venusExpectedAzimuith - 10, venusExpectedAzimuith + 10);
+            venusPosition.Azimuth.Should().BeInRange(venusExpectedAzimuth - 10, venusExpectedAzimuth + 10);
 
             betelgeusePositition.Altitude.Should()
                 .BeInRange(betelgeuseExpectedAltitude - 10, betelgeuseExpectedAltitude + 10);
             betelgeusePositition.Azimuth.Should()
-                .BeInRange(betelgeuseExpectedAzimuith - 10, betelgeuseExpectedAzimuith + 10);
+                .BeInRange(betelgeuseExpectedAzimuth - 10, betelgeuseExpectedAzimuth + 10);
         }
 
         /// <summary>
