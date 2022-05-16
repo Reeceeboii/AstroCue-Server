@@ -23,6 +23,6 @@
         /// <param name="longitude">A longitude</param>
         /// <param name="latitude">A latitude</param>
         /// <returns>An instance of <see cref="FourDayForecastReport"/></returns>
-        Task<FourDayForecastReport> GetForecastNextFourDays(float longitude, float latitude);
+        Task<FourDayForecastReport> GetForecastNextFourDaysAsync(float longitude, float latitude);
     }
 }

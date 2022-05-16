@@ -80,7 +80,7 @@
         /// <param name="longitude">A longitude</param>
         /// <param name="latitude">A latitude</param>
         /// <returns>An instance of <see cref="FourDayForecastReport"/></returns>
-        public async Task<FourDayForecastReport> GetForecastNextFourDays(float longitude,
+        public async Task<FourDayForecastReport> GetForecastNextFourDaysAsync(float longitude,
             float latitude)
         {
             RestRequest req = new(this._environmentManager.BaseOwnHourlyForecastUrl);

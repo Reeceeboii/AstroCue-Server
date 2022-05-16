@@ -140,7 +140,7 @@
                 {
                     // fetch weather forecast for location for next n days
                     FourDayForecastReport forecastForLocation =
-                        this._weatherForecastService.GetForecastNextFourDays(
+                        this._weatherForecastService.GetForecastNextFourDaysAsync(
                             entry.Key.Longitude,
                             entry.Key.Latitude).Result;
 
@@ -299,6 +299,7 @@
                         this._context.SaveChanges();
                     }
 
+                    https://stackoverflow.com/questions/11463734/split-a-list-into-smaller-lists-of-n-size
                     report.Objects = wholeList
                         .Select((x, i) => new { Index = i, Value = x })
                         .GroupBy(x => x.Index / 3)
