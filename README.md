@@ -23,7 +23,7 @@ The overwhelmingly large majority of the project's logic and interesting impleme
 1. [Project goal](#project-goal)
 2. [Project architecture](#project-architecture)
    1. [Design patterns](#design-patterns)
-   2. [MVC(S) diagram](#ngc-header)
+   2. [MVC vs. MVC(S) diagram](#mvcs-diagram)
    3. [Class diagram](#class-diagram)
 3. [Deployment](#deployment)
    1. [Entity Relationship Diagram](#erd)
@@ -60,7 +60,7 @@ In the broadest sense, AstroCue followed the MVC (Model-View-Controller) pattern
 
 <a name="mvcs-diagram"></a>
 
-### 2.2 MVC(S) diagram
+### 2.2 MVC vs. MVC(S) diagram
 
 ![MVC with service layer](./AstroCue.Server/Res/README-images/Service-Layer.png)
 _(Service layer in red)_
@@ -74,6 +74,15 @@ The server contains many classes across many packages, and during planning, a cl
 ![AstroCue class diagram](./AstroCue.Server/Res/README-images/AstroCue-Class-Diagram.svg)
 _(SVG image - open in new tab and zoom for details. Quality will not be lost)._
 
+#### 2.4 Package overview (clickable links)
+
+- [`Entities`](https://github.com/Reeceeboii/AstroCue-Server/tree/master/AstroCue.Server/Entities) | '**M**odels' from **M**VC
+- [`Controllers`](https://github.com/Reeceeboii/AstroCue-Server/tree/master/AstroCue.Server/Controllers) | **C** from MV**C**
+- [`Core`](https://github.com/Reeceeboii/AstroCue-Server/tree/master/AstroCue.Server/Services) | Integral parts of an ASP .NET Core web API
+- [`Astronomy`](https://github.com/Reeceeboii/AstroCue-Server/tree/master/AstroCue.Server/Astronomy) | Computational astronomy calculations
+- [`Services`](https://github.com/Reeceeboii/AstroCue-Server/tree/master/AstroCue.Server/Services) | Services as mentioned in section [2.1](#design-patterns)
+- [`Data`](https://github.com/Reeceeboii/AstroCue-Server/tree/master/AstroCue.Server/Services) |
+
 <a name="deployment"></a>
 
 ## 3. Deployment
@@ -85,6 +94,17 @@ Below is a deployment diagram representing this setup. It also includes the thir
 ![AstroCue deployment diagram](./AstroCue.Server/Res/README-images/AstroCue-Deployment-Diagram.svg)
 _(SVG image - open in new tab and zoom for details. Quality will not be lost)._
 
+<a name="erd"></a>
+
 ### 3.1 Entity Relationship Diagram
+
+Below is the Entity Relationship Diagram created by Microsoft SQL Server Management Studios that shows the different database tables comprising the production database. Note there are several tables created by [Hangfire](https://github.com/HangfireIO/Hangfire) that aren't included for brevity.
+
+![ERD](./AstroCue.Server/Res/README-images/erd.png)
+
+- `AstroCueUsers` | Users table
+- `Observations` | Astronomical observations (between locations and objects)
+- `__EFMigrationsHistory` | Migration history stored by Entity Framework Core
+- `AstronomicalObjects`
 
 [Back to top](#top)
