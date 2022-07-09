@@ -1,18 +1,19 @@
 <a name="top"></a>
 
-# AstroCue Server
-
 ![AstroCue logo](./AstroCue.Server/Res/README-resources/AstroCue-Logo.png)
 
-🎓 **This repo forms a part of my university dissertation that received a final mark of 91%.**
+## _Planning and logging astronomical observations via computational astronomy, open data, and public APIs._
 
 ---
 
-### Dissertation title: _"AstroCue: planning and logging astronomical observations via computational astronomy, open data, and public APIs"_.
+## 🎓 This repo forms a part of my university dissertation that received a final mark of 91%.
 
 ---
 
-The overwhelmingly large majority of the project's logic and interesting implementation details are housed in this repo, the client was very passive, as is typically the case.
+### My final dissertation document can be downloaded using the following link. Please note that this document has been purposely exported with navigation data and clickable cross references to make reading easier. To make use of these, the file is best viewed in a web browser or a dedicated PDF reader (they cannot be navigated in GitHub's native viewer).
+
+![PNG icon](./AstroCue.Server/Res/README-resources/Documents/pdf.png)
+[AstroCue.pdf](./AstroCue.Server/Res/README-resources/Documents/AstroCue.pdf)
 
 ---
 
@@ -91,10 +92,10 @@ _(SVG image - open in new tab and zoom for details. Quality will not be lost)._
 
 - [`Entities`](https://github.com/Reeceeboii/AstroCue-Server/tree/master/AstroCue.Server/Entities) | '**M**odels' from **M**VC
 - [`Controllers`](https://github.com/Reeceeboii/AstroCue-Server/tree/master/AstroCue.Server/Controllers) | **C** from MV**C**
-- [`Core`](https://github.com/Reeceeboii/AstroCue-Server/tree/master/AstroCue.Server/Services) | Integral parts of an ASP .NET Core web API
+- [`Core`](https://github.com/Reeceeboii/AstroCue-Server/tree/master/AstroCue.Server/) | Integral parts of an ASP .NET Core web API
 - [`Astronomy`](https://github.com/Reeceeboii/AstroCue-Server/tree/master/AstroCue.Server/Astronomy) | Computational astronomy calculations
 - [`Services`](https://github.com/Reeceeboii/AstroCue-Server/tree/master/AstroCue.Server/Services) | Services as mentioned in section [2.1](#design-patterns)
-- [`Data`](https://github.com/Reeceeboii/AstroCue-Server/tree/master/AstroCue.Server/Services) |
+- [`Data`](https://github.com/Reeceeboii/AstroCue-Server/tree/master/AstroCue.Server/Data) |
 
 ---
 
