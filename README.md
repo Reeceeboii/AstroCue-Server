@@ -6,7 +6,7 @@
 
 ## 🎓 This repo forms a part of my university dissertation that received a final mark of 91%.
 
-### My final dissertation document can be downloaded using the following link. Please note that this document has been purposely exported with navigation data and clickable cross references to make reading easier. To make use of these, the file is best viewed in a web browser or a dedicated PDF reader (they cannot be navigated in GitHub's native viewer).
+### My final dissertation document can be downloaded using the following link. Please note that this document has been purposely exported with navigation data and clickable cross references to make reading easier. To make use of these, the file is best viewed in a web browser or a dedicated PDF reader as they cannot be used in GitHub's native viewer.
 
 ![PNG icon](./AstroCue.Server/Res/README-resources/Documents/pdf.png)
 [AstroCue.pdf](./AstroCue.Server/Res/README-resources/Documents/AstroCue.pdf)
@@ -104,8 +104,7 @@ Below is a deployment diagram representing this setup. It also includes the thir
 
 ### 3.1 Deployment diagram
 
-![AstroCue deployment diagram](./AstroCue.Server/Res/README-resources/AstroCue-Deployment-Diagram.svg)
-_(SVG image - open in new tab and zoom for details. Quality will not be lost)._
+<img src="./AstroCue.Server/Res/README-resources/AstroCue-Deployment-Diagram.svg" width=800 />
 
 ---
 
@@ -115,7 +114,7 @@ _(SVG image - open in new tab and zoom for details. Quality will not be lost)._
 
 Below is the Entity Relationship Diagram created by Microsoft SQL Server Management Studios that shows the different database tables comprising the production database. Note there are several tables created by [Hangfire](https://github.com/HangfireIO/Hangfire) that aren't included for brevity.
 
-![ERD](./AstroCue.Server/Res/README-resources/erd.png)
+<img src="./AstroCue.Server/Res/README-resources/erd.png" width=800 />
 
 - `AstroCueUsers` | Users table
 - `Observations` | Astronomical observations (between locations and objects)
@@ -141,7 +140,7 @@ The server automatically generates and sends out these emails at 16:00 UTC every
 
 Observation report emails look as follows:
 
-![Report email](./AstroCue.Server/Res/README-resources/astrocueemail.png)
+<img src="./AstroCue.Server/Res/README-resources/astrocueemail.png" width=400 />
 
 <a name="astro"></a>
 
