@@ -4,11 +4,7 @@
 
 ## _Planning and logging astronomical observations via computational astronomy, open data, and public APIs._
 
----
-
 ## 🎓 This repo forms a part of my university dissertation that received a final mark of 91%.
-
----
 
 ### My final dissertation document can be downloaded using the following link. Please note that this document has been purposely exported with navigation data and clickable cross references to make reading easier. To make use of these, the file is best viewed in a web browser or a dedicated PDF reader (they cannot be navigated in GitHub's native viewer).
 
@@ -16,8 +12,6 @@
 [AstroCue.pdf](./AstroCue.Server/Res/README-resources/Documents/AstroCue.pdf)
 
 ---
-
-&nbsp;
 
 <a name="toc"></a>
 
@@ -72,8 +66,7 @@ In the broadest sense, AstroCue followed the MVC (Model-View-Controller) pattern
 
 ### 2.2 MVC vs. MVC(S) diagram
 
-![MVC with service layer](./AstroCue.Server/Res/README-resources/Service-Layer.png)
-_(Service layer in red)_
+<img src="./AstroCue.Server/Res/README-resources/Service-Layer.png" width=400 />
 
 ---
 
