@@ -2,7 +2,7 @@
 
 # AstroCue Server
 
-![AstroCue logo](./AstroCue.Server/Res/README-images/AstroCue-Logo.png)
+![AstroCue logo](./AstroCue.Server/Res/README-resources/AstroCue-Logo.png)
 
 🎓 **This repo forms a part of my university dissertation that received a final mark of 91%.**
 
@@ -25,12 +25,14 @@ The overwhelmingly large majority of the project's logic and interesting impleme
 1. [Project goal](#project-goal)
 2. [Project architecture](#project-architecture)
    1. [Design patterns](#design-patterns)
-   2. [MVC vs. MVC(S) di&nbsp;
-      ram](#mvcs-diagram)
+   2. [MVC vs. MVC(S) diagram](#mvcs-diagram)
    3. [Class diagram](#class-diagram)
 3. [Deployment](#deployment)
-   1. [Entity Relationship Diagram](#erd)
+   1. [Deployment diagram](#deployment-diagram)
+   2. [Entity Relationship Diagram](#erd)
 4. [Reports and computational astronomy](#reports&astro)
+   1. [Report emails](#reports)
+   2. [Computational astronomy](#astri)
 5. [Quick source tree links](#links)
 
 ---
@@ -69,7 +71,7 @@ In the broadest sense, AstroCue followed the MVC (Model-View-Controller) pattern
 
 ### 2.2 MVC vs. MVC(S) diagram
 
-![MVC with service layer](./AstroCue.Server/Res/README-images/Service-Layer.png)
+![MVC with service layer](./AstroCue.Server/Res/README-resources/Service-Layer.png)
 _(Service layer in red)_
 
 ---
@@ -80,7 +82,7 @@ _(Service layer in red)_
 
 The server contains many classes across many packages, and during planning, a class diagram was created to aid the structure as the codebase grew. While the actual structure ended up being slightly different than what is depicted here, it adhered enough to still represent the state on a large scale.
 
-![AstroCue class diagram](./AstroCue.Server/Res/README-images/AstroCue-Class-Diagram.svg)
+![AstroCue class diagram](./AstroCue.Server/Res/README-resources/AstroCue-Class-Diagram.svg)
 _(SVG image - open in new tab and zoom for details. Quality will not be lost)._
 
 ---
@@ -104,18 +106,22 @@ The server was deployed to Microsoft Azure. It consisted of an App Service insta
 
 Below is a deployment diagram representing this setup. It also includes the third party APIs and an example of a client.
 
-![AstroCue deployment diagram](./AstroCue.Server/Res/README-images/AstroCue-Deployment-Diagram.svg)
+<a name="deployment-diagram"></a>
+
+### 3.1 Deployment diagram
+
+![AstroCue deployment diagram](./AstroCue.Server/Res/README-resources/AstroCue-Deployment-Diagram.svg)
 _(SVG image - open in new tab and zoom for details. Quality will not be lost)._
 
 ---
 
 <a name="erd"></a>
 
-### 3.1 Entity Relationship Diagram
+### 3.2 Entity Relationship Diagram
 
 Below is the Entity Relationship Diagram created by Microsoft SQL Server Management Studios that shows the different database tables comprising the production database. Note there are several tables created by [Hangfire](https://github.com/HangfireIO/Hangfire) that aren't included for brevity.
 
-![ERD](./AstroCue.Server/Res/README-images/erd.png)
+![ERD](./AstroCue.Server/Res/README-resources/erd.png)
 
 - `AstroCueUsers` | Users table
 - `Observations` | Astronomical observations (between locations and objects)
@@ -135,11 +141,24 @@ The main purpose of AstroCue was to provide users with reports about when the be
 
 The server automatically generates and sends out these emails at 16:00 UTC every Monday and Thursday, but users can also request for their reports to be generated on demand. For each `observation` (a combination of one of their observation locations and an astronomical object) owned by a given user, a single report would be generated. All of the reports for a given run are collated and sent in a single email.
 
+<a name="reports"></a>
+
+### 4.1 Report emails
+
 Observation report emails look as follows:
 
-![Report email](./AstroCue.Server/Res/README-images/astrocueemail.png)
+![Report email](./AstroCue.Server/Res/README-resources/astrocueemail.png)
 
+<a name="astro"></a>
 
+### 4.2 Computational astronomy
+
+At the core of the computational astronomy algorithms implemented by AstroCue is a transformation between the equatorial and horizontal coordinate systems.
+
+For an introduction to these systems, a section of my report has been exported for easy access and can be found here:
+
+![PNG icon](./AstroCue.Server/Res/README-resources/Documents/pdf.png)
+[Introduction to Celestial Coordinate Systems.pdf](./AstroCue.Server/Res/README-resources/Documents/Introduction%20to%20Celestial%20Coordinate%20Systems.pdf)
 
 ---
 
@@ -149,19 +168,19 @@ Observation report emails look as follows:
 
 Use these links to quickly navigate to a point of interest in the repository.
 
-- ### 💉 **Dependency injection** - [Container setup](https://github.com/Reeceeboii/AstroCue-Server/blob/abe5a4d2d33410a34dc52a46e416b5a4478a060a/AstroCue.Server/Startup.cs#L154-L188) | [Example client](https://github.com/Reeceeboii/AstroCue-Server/blob/abe5a4d2d33410a34dc52a46e416b5a4478a060a/AstroCue.Server/Services/ReportService.cs#L57-L62)
-- ### 💃 [**Models**](https://github.com/Reeceeboii/AstroCue-Server/tree/master/AstroCue.Server/Entities) - (**M**VC) - referred to as 'entities' in this codebase
-- ### 🎮 [**Controllers**](https://github.com/Reeceeboii/AstroCue-Server/tree/master/AstroCue.Server/Controllers) - (MV**C**)
-- ### 🌟 **Computational astronomy** - [Celestial coordinate transforms](https://github.com/Reeceeboii/AstroCue-Server/blob/master/AstroCue.Server/Astronomy/CoordinateTransformations.cs) | [Diurnal motion](https://github.com/Reeceeboii/AstroCue-Server/blob/abe5a4d2d33410a34dc52a46e416b5a4478a060a/AstroCue.Server/Services/ObservationService.cs#L107-L153)
-- ### 💡 [**Light pollution calculations**](https://github.com/Reeceeboii/AstroCue-Server/blob/master/AstroCue.Server/Astronomy/BortleScale.cs) using the Bortle Scale
+- #### 💉 **Dependency injection** - [Container setup](https://github.com/Reeceeboii/AstroCue-Server/blob/abe5a4d2d33410a34dc52a46e416b5a4478a060a/AstroCue.Server/Startup.cs#L154-L188) | [Example client](https://github.com/Reeceeboii/AstroCue-Server/blob/abe5a4d2d33410a34dc52a46e416b5a4478a060a/AstroCue.Server/Services/ReportService.cs#L57-L62)
+- #### 💃 [**Models**](https://github.com/Reeceeboii/AstroCue-Server/tree/master/AstroCue.Server/Entities) - (**M**VC) - referred to as 'entities' in this codebase
+- #### 🎮 [**Controllers**](https://github.com/Reeceeboii/AstroCue-Server/tree/master/AstroCue.Server/Controllers) - (MV**C**)
+- #### 🌟 **Computational astronomy** - [Celestial coordinate transforms](https://github.com/Reeceeboii/AstroCue-Server/blob/master/AstroCue.Server/Astronomy/CoordinateTransformations.cs) | [Diurnal motion](https://github.com/Reeceeboii/AstroCue-Server/blob/abe5a4d2d33410a34dc52a46e416b5a4478a060a/AstroCue.Server/Services/ObservationService.cs#L107-L153)
+- #### 💡 [**Light pollution calculations**](https://github.com/Reeceeboii/AstroCue-Server/blob/master/AstroCue.Server/Astronomy/BortleScale.cs) using the Bortle Scale
 - ### ⚙️ Services for:
-  - ### ✉️ [**Sending emails**](https://github.com/Reeceeboii/AstroCue-Server/blob/master/AstroCue.Server/Services/EmailService.cs) via the MailGun API
-  - ### 🗺️ [**Retrieving mapping data**](https://github.com/Reeceeboii/AstroCue-Server/blob/master/AstroCue.Server/Services/MappingService.cs) via the MapBox API
-  - ### 🌧️ [**Retrieving weather data**](https://github.com/Reeceeboii/AstroCue-Server/blob/master/AstroCue.Server/Services/WeatherForecastService.cs) via the OpenWeatherMap API
-  - ### 💡 [**Calculating arbitrary light pollution levels**](https://github.com/Reeceeboii/AstroCue-Server/blob/master/AstroCue.Server/Services/LightPollutionService.cs)
-  - ### 📋 [**Generating AstroCue's reports**](https://github.com/Reeceeboii/AstroCue-Server/blob/master/AstroCue.Server/Services/ReportService.cs)
-- ### 🗂️ [**Parsing astronomical catalogues**](https://github.com/Reeceeboii/AstroCue-Server/tree/master/AstroCue.Server/Data/Parsers)
-- ### 💾 [**EF Core database context**](https://github.com/Reeceeboii/AstroCue-Server/blob/master/AstroCue.Server/Data/ApplicationDbContext.cs)
+  - #### ✉️ [**Sending emails**](https://github.com/Reeceeboii/AstroCue-Server/blob/master/AstroCue.Server/Services/EmailService.cs) via the MailGun API
+  - #### 🗺️ [**Retrieving mapping data**](https://github.com/Reeceeboii/AstroCue-Server/blob/master/AstroCue.Server/Services/MappingService.cs) via the MapBox API
+  - #### 🌧️ [**Retrieving weather data**](https://github.com/Reeceeboii/AstroCue-Server/blob/master/AstroCue.Server/Services/WeatherForecastService.cs) via the OpenWeatherMap API
+  - #### 💡 [**Calculating arbitrary light pollution levels**](https://github.com/Reeceeboii/AstroCue-Server/blob/master/AstroCue.Server/Services/LightPollutionService.cs)
+  - #### 📋 [**Generating AstroCue's reports**](https://github.com/Reeceeboii/AstroCue-Server/blob/master/AstroCue.Server/Services/ReportService.cs)
+- #### 🗂️ [**Parsing astronomical catalogues**](https://github.com/Reeceeboii/AstroCue-Server/tree/master/AstroCue.Server/Data/Parsers)
+- #### 💾 [**EF Core database context**](https://github.com/Reeceeboii/AstroCue-Server/blob/master/AstroCue.Server/Data/ApplicationDbContext.cs)
 
 ---
 
