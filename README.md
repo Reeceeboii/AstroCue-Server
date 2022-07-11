@@ -6,7 +6,7 @@
 
 ## 🎓 This repo forms a part of my university dissertation that received a final mark of 91%.
 
-### My final dissertation document can be downloaded using the following link. Please note that this document has been purposely exported with navigation data and clickable cross references to make reading easier. To make use of these, the file is best viewed in a web browser or a dedicated PDF reader as they cannot be used in GitHub's native viewer.
+### My final dissertation document can be downloaded using the following link. Please note that this document has been purposely exported with navigation data and clickable cross references to make reading easier as it is almost 240 pages long. To make use of these, the file is best viewed in a web browser or a dedicated PDF reader as they cannot be used in GitHub's native viewer.
 
 [<img src="./AstroCue.Server/Res/README-resources/Documents/pdf.png">AstroCue.pdf](./AstroCue.Server/Res/README-resources/Documents/AstroCue.pdf)
 
@@ -164,9 +164,9 @@ This transformation is also used to calculate Diurnal Motion. Most people have s
 
 This is Diurnal Motion in action - the apparent motion of astronomical objects across the sky during the night. You can imagine that across a full [day](https://en.wikipedia.org/wiki/Sidereal_time#Sidereal_day), objects will complete a full circle, appearing to revolve around the northern and southern pole stars.
 
-AstroCue use Diurnal Motion as a measurement of whether a given object will rise above the horizon at a given location. If you simulate a full 24hr cycle of this motion and look at the altitude values (degrees above or below the horizon) of the object at each hour, if any of them are >0°, then you can say that the object is certain* to rise above the horizon at that location.
+AstroCue use Diurnal Motion as a measurement of whether a given object will rise above the horizon at a given location. If you simulate a full 24hr cycle of this motion and look at the altitude values (degrees above or below the horizon) of the object at each hour, if any of them are >0°, then you can say that the object is certain\* to rise above the horizon at that location.
 
-**Note that this doesn't take into account atmospheric refraction or the time of day. Refraction was not considered, but making this calculation relative to the night time hours at a given location would be a simple addition to the code in its current state.*
+\*_Note that this doesn't take into account atmospheric refraction or the time of day. Refraction was not considered, but making this calculation relative to the night time hours at a given location would be a simple addition to the code in its current state._
 
 ---
 
