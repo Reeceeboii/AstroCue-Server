@@ -6,7 +6,7 @@
 
 ## 🎓 This repo forms a part of my university dissertation that received a final mark of 91%.
 
-### My final dissertation document can be downloaded using the following link. Please note that this document has been purposely exported with navigation data and clickable cross references to make reading easier as it is almost 240 pages long. To make use of these, the file is best viewed in a web browser or a dedicated PDF reader as they cannot be used in GitHub's native viewer.
+My final dissertation document can be downloaded using the following link. Please note that this document has been purposely exported with navigation data and clickable cross references to make reading easier as it is almost 240 pages long. To make use of these, the file is best viewed in a web browser or a dedicated PDF reader as they cannot be used in GitHub's native viewer.
 
 [<img src="./AstroCue.Server/Res/README-resources/Documents/pdf.png" />AstroCue.pdf](./AstroCue.Server/Res/README-resources/Documents/AstroCue.pdf)
 
@@ -28,7 +28,7 @@ I also created a demo video so you can get a better idea of how everything fits 
 3. [Deployment](#deployment)
    1. [Deployment diagram](#deployment-diagram)
    2. [Entity Relationship Diagram](#erd)
-4. [Reports and computational astronomy](#reports&astro)
+4. [Observation reports and computational astronomy](#reports&astro)
    1. [Report emails](#reports)
    2. [Computational astronomy](#astro)
    3. [Diurnal Motion](#diurnal-motion)
