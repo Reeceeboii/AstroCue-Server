@@ -1,4 +1,4 @@
-# README-images
+# README-resources
 
 This folder exists to hold images and various other files that appear in the main repo README.md file.
 
