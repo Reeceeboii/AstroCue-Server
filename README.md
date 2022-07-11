@@ -180,19 +180,19 @@ AstroCue use Diurnal Motion as a measurement of whether a given object will rise
 
 Use these links to quickly navigate to a point of interest in the repository.
 
-- #### 💉 **Dependency injection** - [Container setup](https://github.com/Reeceeboii/AstroCue-Server/blob/abe5a4d2d33410a34dc52a46e416b5a4478a060a/AstroCue.Server/Startup.cs#L154-L188) | [Example client](https://github.com/Reeceeboii/AstroCue-Server/blob/abe5a4d2d33410a34dc52a46e416b5a4478a060a/AstroCue.Server/Services/ReportService.cs#L57-L62)
-- #### 💃 [**Models**](https://github.com/Reeceeboii/AstroCue-Server/tree/master/AstroCue.Server/Entities) - (**M**VC) - referred to as 'entities' in this codebase
-- #### 🎮 [**Controllers**](https://github.com/Reeceeboii/AstroCue-Server/tree/master/AstroCue.Server/Controllers) - (MV**C**)
-- #### 🌟 **Computational astronomy** - [Celestial coordinate transforms](https://github.com/Reeceeboii/AstroCue-Server/blob/master/AstroCue.Server/Astronomy/CoordinateTransformations.cs) | [Diurnal motion](https://github.com/Reeceeboii/AstroCue-Server/blob/abe5a4d2d33410a34dc52a46e416b5a4478a060a/AstroCue.Server/Services/ObservationService.cs#L107-L153)
-- #### 💡 [**Light pollution calculations**](https://github.com/Reeceeboii/AstroCue-Server/blob/master/AstroCue.Server/Astronomy/BortleScale.cs) using the Bortle Scale
-- ### ⚙️ Services for:
-  - #### ✉️ [**Sending emails**](https://github.com/Reeceeboii/AstroCue-Server/blob/master/AstroCue.Server/Services/EmailService.cs) via the MailGun API
-  - #### 🗺️ [**Retrieving mapping data**](https://github.com/Reeceeboii/AstroCue-Server/blob/master/AstroCue.Server/Services/MappingService.cs) via the MapBox API
-  - #### 🌧️ [**Retrieving weather data**](https://github.com/Reeceeboii/AstroCue-Server/blob/master/AstroCue.Server/Services/WeatherForecastService.cs) via the OpenWeatherMap API
-  - #### 💡 [**Calculating arbitrary light pollution levels**](https://github.com/Reeceeboii/AstroCue-Server/blob/master/AstroCue.Server/Services/LightPollutionService.cs)
-  - #### 📋 [**Generating AstroCue's reports**](https://github.com/Reeceeboii/AstroCue-Server/blob/master/AstroCue.Server/Services/ReportService.cs)
-- #### 🗂️ [**Parsing astronomical catalogues**](https://github.com/Reeceeboii/AstroCue-Server/tree/master/AstroCue.Server/Data/Parsers)
-- #### 💾 [**EF Core database context**](https://github.com/Reeceeboii/AstroCue-Server/blob/master/AstroCue.Server/Data/ApplicationDbContext.cs)
+- 💉 **Dependency injection** - [Container setup](https://github.com/Reeceeboii/AstroCue-Server/blob/abe5a4d2d33410a34dc52a46e416b5a4478a060a/AstroCue.Server/Startup.cs#L154-L188) | [Example client](https://github.com/Reeceeboii/AstroCue-Server/blob/abe5a4d2d33410a34dc52a46e416b5a4478a060a/AstroCue.Server/Services/ReportService.cs#L57-L62)
+- 💃 [**Models**](https://github.com/Reeceeboii/AstroCue-Server/tree/master/AstroCue.Server/Entities) - (**M**VC) - referred to as 'entities' in this codebase
+- 🎮 [**Controllers**](https://github.com/Reeceeboii/AstroCue-Server/tree/master/AstroCue.Server/Controllers) - (MV**C**)
+- 🌟 **Computational astronomy** - [Celestial coordinate transforms](https://github.com/Reeceeboii/AstroCue-Server/blob/master/AstroCue.Server/Astronomy/CoordinateTransformations.cs) | [Diurnal motion](https://github.com/Reeceeboii/AstroCue-Server/blob/abe5a4d2d33410a34dc52a46e416b5a4478a060a/AstroCue.Server/Services/ObservationService.cs#L107-L153)
+- 💡 [**Light pollution calculations**](https://github.com/Reeceeboii/AstroCue-Server/blob/master/AstroCue.Server/Astronomy/BortleScale.cs) using the Bortle Scale
+- ⚙️ Services for:
+  - ✉️ [**Sending emails**](https://github.com/Reeceeboii/AstroCue-Server/blob/master/AstroCue.Server/Services/EmailService.cs) via the MailGun API
+  - 🗺️ [**Retrieving mapping data**](https://github.com/Reeceeboii/AstroCue-Server/blob/master/AstroCue.Server/Services/MappingService.cs) via the MapBox API
+  - 🌧️ [**Retrieving weather data**](https://github.com/Reeceeboii/AstroCue-Server/blob/master/AstroCue.Server/Services/WeatherForecastService.cs) via the OpenWeatherMap API
+  - 💡 [**Calculating arbitrary light pollution levels**](https://github.com/Reeceeboii/AstroCue-Server/blob/master/AstroCue.Server/Services/LightPollutionService.cs)
+  - 📋 [**Generating AstroCue's reports**](https://github.com/Reeceeboii/AstroCue-Server/blob/master/AstroCue.Server/Services/ReportService.cs)
+- 🗂️ [**Parsing astronomical catalogues**](https://github.com/Reeceeboii/AstroCue-Server/tree/master/AstroCue.Server/Data/Parsers)
+- 💾 [**EF Core database context**](https://github.com/Reeceeboii/AstroCue-Server/blob/master/AstroCue.Server/Data/ApplicationDbContext.cs)
 
 ---
 
