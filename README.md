@@ -8,8 +8,7 @@
 
 ### My final dissertation document can be downloaded using the following link. Please note that this document has been purposely exported with navigation data and clickable cross references to make reading easier. To make use of these, the file is best viewed in a web browser or a dedicated PDF reader as they cannot be used in GitHub's native viewer.
 
-![PNG icon](./AstroCue.Server/Res/README-resources/Documents/pdf.png)
-[AstroCue.pdf](./AstroCue.Server/Res/README-resources/Documents/AstroCue.pdf)
+[<img src="./AstroCue.Server/Res/README-resources/Documents/pdf.png">AstroCue.pdf](./AstroCue.Server/Res/README-resources/Documents/AstroCue.pdf)
 
 ---
 
@@ -27,7 +26,8 @@
    2. [Entity Relationship Diagram](#erd)
 4. [Reports and computational astronomy](#reports&astro)
    1. [Report emails](#reports)
-   2. [Computational astronomy](#astri)
+   2. [Computational astronomy](#astro)
+   3. [Diurnal Motion](#diurnal-motion)
 5. [Quick source tree links](#links)
 
 ---
@@ -150,8 +150,23 @@ At the core of the computational astronomy algorithms implemented by AstroCue is
 
 For an introduction to these systems, a section of my report has been exported for easy access and can be found here:
 
-![PNG icon](./AstroCue.Server/Res/README-resources/Documents/pdf.png)
-[Introduction to Celestial Coordinate Systems.pdf](./AstroCue.Server/Res/README-resources/Documents/Introduction%20to%20Celestial%20Coordinate%20Systems.pdf)
+[<img src="./AstroCue.Server/Res/README-resources/Documents/pdf.png">Introduction to Celestial Coordinate Systems.pdf](./AstroCue.Server/Res/README-resources/Documents/Introduction%20to%20Celestial%20Coordinate%20Systems.pdf)
+
+This transformation allows the server to take the fixed coordinates of astronomical objects inside astronomical catalogues, and turn them into relative & local coordinates that are specific to a given location at a given time. In most typical cases, this calculation is used where the 'given time' is the best rated time to observe based on analysis of upcoming weather at the user's observation location.
+
+<a name="diurnal-motion"></a>
+
+### 4.3 Diurnal Motion
+
+This transformation is also used to calculate Diurnal Motion. Most people have seen long exposure pictures such as this:
+
+![Diurnal Motion](https://static.wikia.nocookie.net/homeofphysics/images/5/5d/8976437367_98a19c7b26_z.jpg/revision/latest?cb=20141229191820)
+
+This is Diurnal Motion in action - the apparent motion of astronomical objects across the sky during the night. You can imagine that across a full [day](https://en.wikipedia.org/wiki/Sidereal_time#Sidereal_day), objects will complete a full circle, appearing to revolve around the northern and southern pole stars.
+
+AstroCue use Diurnal Motion as a measurement of whether a given object will rise above the horizon at a given location. If you simulate a full 24hr cycle of this motion and look at the altitude values (degrees above or below the horizon) of the object at each hour, if any of them are >0°, then you can say that the object is certain* to rise above the horizon at that location.
+
+**Note that this doesn't take into account atmospheric refraction or the time of day. Refraction was not considered, but making this calculation relative to the night time hours at a given location would be a simple addition to the code in its current state.*
 
 ---
 
