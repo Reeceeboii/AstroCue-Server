@@ -8,7 +8,11 @@
 
 ### My final dissertation document can be downloaded using the following link. Please note that this document has been purposely exported with navigation data and clickable cross references to make reading easier as it is almost 240 pages long. To make use of these, the file is best viewed in a web browser or a dedicated PDF reader as they cannot be used in GitHub's native viewer.
 
-[<img src="./AstroCue.Server/Res/README-resources/Documents/pdf.png">AstroCue.pdf](./AstroCue.Server/Res/README-resources/Documents/AstroCue.pdf)
+[<img src="./AstroCue.Server/Res/README-resources/Documents/pdf.png" />AstroCue.pdf](./AstroCue.Server/Res/README-resources/Documents/AstroCue.pdf)
+
+I also created a demo video so you can get a better idea of how everything fits together:
+
+[<img src="./AstroCue.Server/Res/README-resources/thumb.png" width=500/>](https://www.youtube.com/watch?v=WOHxpyELWGg)
 
 ---
 
