@@ -164,7 +164,9 @@ This transformation allows the server to take the fixed coordinates of astronomi
 
 This transformation is also used to calculate Diurnal Motion. Most people have seen long exposure pictures such as this:
 
-![Diurnal Motion](https://static.wikia.nocookie.net/homeofphysics/images/5/5d/8976437367_98a19c7b26_z.jpg/revision/latest?cb=20141229191820)
+![Diurnal Motion](./AstroCue.Server/Res/README-resources/dirunal%20motion.webp)
+
+_Image from [homeofphysics Wiki](https://homeofphysics.fandom.com/wiki/Diurnal_Motion)._
 
 This is Diurnal Motion in action - the apparent motion of astronomical objects across the sky during the night. You can imagine that across a full [day](https://en.wikipedia.org/wiki/Sidereal_time#Sidereal_day), objects will complete a full circle, appearing to revolve around the northern and southern pole stars.
 
