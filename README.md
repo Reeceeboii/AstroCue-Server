@@ -32,7 +32,8 @@ I also created a demo video so you can get a better idea of how everything fits 
    1. [Report emails](#reports)
    2. [Computational astronomy](#astro)
    3. [Diurnal Motion](#diurnal-motion)
-5. [Quick source tree links](#links)
+5. [Testing](#testing)
+6. [Quick source tree links](#links)
 
 ---
 
@@ -60,7 +61,7 @@ Overall, AstroCue was a distributed client-server system. The server (this repos
 In the broadest sense, AstroCue followed the MVC (Model-View-Controller) pattern, but with a view noteworthy alterations:
 
 - The **view** layer was actually a separate codebase on a separate domain (see the [AstroCue Client](https://github.com/Reeceeboii/AstroCue-Client)).
-- The server, on top of **models** and **controllers**, introduced a **service** layer. This layer housed data access code and a large portion of the business logic. These service classes were specific to a task (i.e. `EmailService` or `UserService`, and had accompanying interfaces such as `featuresEmailService` and `IUserService`). These service classes were reusable and maintainable as they were fine grained and had their concrete behaviors offered to client classes through their interfaces that were registered with a dependency injection container.
+- The server, on top of **models** and **controllers**, introduced a **service** layer. This layer housed data access code and a large portion of the business logic. These service classes were specific to a task (i.e. `EmailService` or `UserService`, and had accompanying interfaces such as `IEmailService` and `IUserService`). These service classes were reusable and maintainable as they were fine grained and had their concrete behaviors offered to client classes through their interfaces that were registered with a dependency injection container.
 
   _This is similar to Martin Fowler's [P of EAA Catalog - Service Layer](https://martinfowler.com/eaaCatalog/serviceLayer.html)._
 
@@ -92,7 +93,7 @@ _(SVG image - open in new tab and zoom for details. Quality will not be lost)._
 - [`Core`](https://github.com/Reeceeboii/AstroCue-Server/tree/master/AstroCue.Server/) | Integral parts of an ASP .NET Core web API
 - [`Astronomy`](https://github.com/Reeceeboii/AstroCue-Server/tree/master/AstroCue.Server/Astronomy) | Computational astronomy calculations
 - [`Services`](https://github.com/Reeceeboii/AstroCue-Server/tree/master/AstroCue.Server/Services) | Services as mentioned in section [2.1](#design-patterns)
-- [`Data`](https://github.com/Reeceeboii/AstroCue-Server/tree/master/AstroCue.Server/Data) |
+- [`Data`](https://github.com/Reeceeboii/AstroCue-Server/tree/master/AstroCue.Server/Data) | Astronomical catalogue parsers, environment variables, and EF Core database context
 
 ---
 
@@ -176,9 +177,19 @@ AstroCue use Diurnal Motion as a measurement of whether a given object will rise
 
 ---
 
+<a name="testing"></a>
+
+## 5. Testing
+
+AstroCue was tested via unit tests and routine use of Visual Studio's Maintainability Index feature. Unit tests covered important logic where appropriate (and where time permitted), along with acting as a way to support my main report when I asserted that certain technical objectives I'd set myself had actually been met.
+
+Unit tests made use of a few libraries. Notably was MSTest for the actual testing framework, Moq for mocking, and MockHTTP for testing of some external HTTP behaviour.
+
+---
+
 <a name="links"></a>
 
-## 5. Quick source tree links
+## 6. Quick source tree links
 
 Use these links to quickly navigate to a point of interest in the repository.
 
@@ -195,6 +206,7 @@ Use these links to quickly navigate to a point of interest in the repository.
   - 📋 [**Generating AstroCue's reports**](https://github.com/Reeceeboii/AstroCue-Server/blob/master/AstroCue.Server/Services/ReportService.cs)
 - 🗂️ [**Parsing astronomical catalogues**](https://github.com/Reeceeboii/AstroCue-Server/tree/master/AstroCue.Server/Data/Parsers)
 - 💾 [**EF Core database context**](https://github.com/Reeceeboii/AstroCue-Server/blob/master/AstroCue.Server/Data/ApplicationDbContext.cs)
+- 🧪 [**Unit tests**](https://github.com/Reeceeboii/AstroCue-Server/tree/master/AstroCue.Test) - includes dependency mocking and in-memory database testing
 
 ---
 
