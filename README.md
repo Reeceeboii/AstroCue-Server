@@ -206,7 +206,7 @@ Use these links to quickly navigate to a point of interest in the repository.
   - 📋 [**Generating AstroCue's reports**](https://github.com/Reeceeboii/AstroCue-Server/blob/master/AstroCue.Server/Services/ReportService.cs)
 - 🗂️ [**Parsing astronomical catalogues**](https://github.com/Reeceeboii/AstroCue-Server/tree/master/AstroCue.Server/Data/Parsers)
 - 💾 [**EF Core database context**](https://github.com/Reeceeboii/AstroCue-Server/blob/master/AstroCue.Server/Data/ApplicationDbContext.cs)
-- 🧪 [**Unit tests**](https://github.com/Reeceeboii/AstroCue-Server/tree/master/AstroCue.Test)
+- 🧪 [**Unit tests**](https://github.com/Reeceeboii/AstroCue-Server/tree/master/AstroCue.Test) - includes dependency mocking and in-memory database testing
 
 ---
 
