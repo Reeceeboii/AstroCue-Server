@@ -117,7 +117,7 @@ Below is a deployment diagram representing this setup. It also includes the thir
 
 ### 3.2 Entity Relationship Diagram
 
-Below is the Entity Relationship Diagram created by Microsoft SQL Server Management Studios that shows the different database tables comprising the production database. Note there are several tables created by [Hangfire](https://github.com/HangfireIO/Hangfire) that aren't included for brevity.
+Below is the Entity Relationship Diagram created by Microsoft SQL Server Management Studio that shows the different database tables comprising the production database. Note there are several tables created by [Hangfire](https://github.com/HangfireIO/Hangfire) that aren't included for brevity.
 
 <img src="./AstroCue.Server/Res/README-resources/erd.png" width=800 />
 
