@@ -58,7 +58,7 @@ Overall, AstroCue was a distributed client-server system. The server (this repos
 
 ### 2.1 Design patterns
 
-In the broadest sense, AstroCue followed the MVC (Model-View-Controller) pattern, but with a view noteworthy alterations:
+In the broadest sense, AstroCue followed the MVC (Model-View-Controller) pattern, but with a few noteworthy alterations:
 
 - The **view** layer was actually a separate codebase on a separate domain (see the [AstroCue Client](https://github.com/Reeceeboii/AstroCue-Client)).
 - The server, on top of **models** and **controllers**, introduced a **service** layer. This layer housed data access code and a large portion of the business logic. These service classes were specific to a task (i.e. `EmailService` or `UserService`, and had accompanying interfaces such as `IEmailService` and `IUserService`). These service classes were reusable and maintainable as they were fine grained and had their concrete behaviors offered to client classes through their interfaces that were registered with a dependency injection container.
